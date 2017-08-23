@@ -33,7 +33,7 @@ public class PathCompressionWeightedQuickUnion {
 	}
 	
 	//实际数组
-	private int[] id;
+	public int[] id;
 	//子树的大小 刚开始都是1
 	private int[] treeSize;
 	//分量
@@ -41,6 +41,7 @@ public class PathCompressionWeightedQuickUnion {
 	
 	//找到root节点
 	private int root(int i) {
+		
 		while (i != id[i]) {
 			//把父节点指向父节点的父节点
 			//make every other node in path point to its grandparent
@@ -49,6 +50,7 @@ public class PathCompressionWeightedQuickUnion {
 			i = id[i];
 		}
 		return i;
+		
 	}
 	
 	//N
@@ -65,7 +67,7 @@ public class PathCompressionWeightedQuickUnion {
 	//add connection between
 	//Lg(N)
 	public void union(int p, int q) {
-		//根节点
+		//根节点 
 		int pRoot = root(p);
 		int qRoot = root(q);
 		

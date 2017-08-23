@@ -63,6 +63,7 @@ public class QuickUnionUF {
 		if (pRoot == qRoot) return;
 		
 		id[qRoot] = pRoot;
+		count--;
 	}
 	
 	//判断2个点是否连接在一起
