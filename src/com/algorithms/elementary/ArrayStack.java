@@ -7,20 +7,19 @@ import java.util.Iterator;
 public class ArrayStack<T> implements Stack<T>{
 	
 	public static void main(String[] args) {
-		Stack<Integer> stack = new LinkedStack<Integer>();
-		stack.push(1);
-		stack.push(2);
-		stack.push(3);
-		stack.push(1);
-		stack.pop();
-		stack.push(100);
-		stack.push(200);
-		stack.pop();
+		Queue<Integer> stack = new LinkedQueue<Integer>();
+		stack.enqueue(1);
+		stack.enqueue(2);
+		stack.enqueue(3);
+		stack.enqueue(1);
+		stack.dequeue();
+		stack.enqueue(100);
+		stack.enqueue(200);
+		stack.dequeue();
 		
 		for (Integer i : stack)
 			System.out.println(i);
 	}
-	
 	
 	private int capacity;
 	private static int DEFAULT_CAPACITY = 10;

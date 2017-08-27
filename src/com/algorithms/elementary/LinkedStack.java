@@ -4,10 +4,6 @@ import java.util.Iterator;
 
 public class LinkedStack<T> implements Stack<T>{
 	
-	public static void main(String[] args) {
-		
-	}
-	
 	Node first = null;
 	private int size = 0;
 	public LinkedStack(){};
