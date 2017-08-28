@@ -19,6 +19,9 @@ public class InteractivePercolationVisualizer {
     @SuppressWarnings("deprecation")
 	public static void main(String[] args) {
         // n-by-n percolation system (read from command-line, default = 10)
+    	args[0] = "3";
+    	
+    	
         int n = 10;          
         if (args.length == 1) n = Integer.parseInt(args[0]);
 
@@ -27,6 +30,12 @@ public class InteractivePercolationVisualizer {
 
         StdDraw.enableDoubleBuffering();
         Percolation perc = new Percolation(n);
+        perc.open(0, 2);
+        perc.open(1, 2);
+        perc.open(2, 2);
+        perc.open(2, 0);
+        perc.open(1, 0);
+        perc.open(0, 0);
         PercolationVisualizer.draw(perc, n);
         StdDraw.show();
 

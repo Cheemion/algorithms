@@ -22,7 +22,7 @@ public class Percolation {
 	
 	public static void main(String[] args) {
 
-		int size = 8000;
+		int size = 10000;
 		Percolation percolation = new Percolation(size);
 		while(!percolation.percolates()) {
 			int row = rand.nextInt(size);

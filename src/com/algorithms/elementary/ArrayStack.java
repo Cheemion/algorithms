@@ -7,18 +7,6 @@ import java.util.Iterator;
 public class ArrayStack<T> implements Stack<T>{
 	
 	public static void main(String[] args) {
-		Queue<Integer> stack = new LinkedQueue<Integer>();
-		stack.enqueue(1);
-		stack.enqueue(2);
-		stack.enqueue(3);
-		stack.enqueue(1);
-		stack.dequeue();
-		stack.enqueue(100);
-		stack.enqueue(200);
-		stack.dequeue();
-		
-		for (Integer i : stack)
-			System.out.println(i);
 	}
 	
 	private int capacity;
