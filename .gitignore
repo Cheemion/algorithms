@@ -29,3 +29,6 @@ bin
 ./data
 /data
 data
+./settings
+/settings
+settings
