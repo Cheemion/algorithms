@@ -21,14 +21,14 @@
 hs_err_pid*
 
 # eclipse
-./bin
 /bin
+.bin
 bin
 .classpath
 .project
-./data
+.data
+.settings
+/data/*
 /data
+.data
 data
-./settings
-/settings
-settings
