@@ -26,7 +26,7 @@ public class BinarySearch {
 		}
 		return -1; //Ã»ÕÒµ½
 	}
-	//
+	//recursive
 	public static int rank2(int key, int [] a) {
 		return find(key, 0, a.length - 1, a);
 	}
