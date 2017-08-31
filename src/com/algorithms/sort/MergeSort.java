@@ -3,6 +3,11 @@ package com.algorithms.sort;
 import static com.algorithms.sort.Sorts.*;
 
 import java.util.Arrays;
+/**
+ * MergeSort 是 stable的
+ * @author kim
+ *
+ */
 public class MergeSort {
 	
 	public static void main(String[] args) {
@@ -18,14 +23,26 @@ public class MergeSort {
 	}
 	
 	//Time : N log(N) & wasting space that proportional to N
-	public static void bottomUpSort(Comparable[] a) {
+	public static void bottomUpSort1(Comparable[] a) {
 		int n = a.length;
 		Comparable[] aux = new Comparable[a.length];
 		for (int step = 1; step < n; step = step * 2) {
 			for (int j = 0; j < n; j = j + step) {
 				System.out.println(n - 1 - j);
 				int realStep = Math.min(step, n - 1 - j);
-				merge(a, aux, j, j + (realStep / 2), j + realStep);
+				merge(a, aux, j, (j + (realStep / 2))>j?(j + (realStep / 2))-1:(j + (realStep / 2)), j + realStep);
+				System.out.println(Arrays.toString(a));
+			}
+		}
+	}
+	
+	public static void bottomUpSort(Comparable[] a) {
+		int n = a.length;
+		Comparable[] aux = new Comparable[a.length];
+		//  size 是指 左数组的大小，和右数组的大小
+		for (int size = 1; size < n; size = size + size) {
+			for (int low = 0; low < n; low = low + size + size) {
+				merge(a, aux, low, low + size - 1, Math.min(low + size + size - 1, n - 1));
 			}
 		}
 	}
