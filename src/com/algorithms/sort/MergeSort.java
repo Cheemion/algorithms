@@ -22,20 +22,6 @@ public class MergeSort {
 		sort(a, new Comparable[a.length], 0, a.length - 1);
 	}
 	
-	//Time : N log(N) & wasting space that proportional to N
-	public static void bottomUpSort1(Comparable[] a) {
-		int n = a.length;
-		Comparable[] aux = new Comparable[a.length];
-		for (int step = 1; step < n; step = step * 2) {
-			for (int j = 0; j < n; j = j + step) {
-				System.out.println(n - 1 - j);
-				int realStep = Math.min(step, n - 1 - j);
-				merge(a, aux, j, (j + (realStep / 2))>j?(j + (realStep / 2))-1:(j + (realStep / 2)), j + realStep);
-				System.out.println(Arrays.toString(a));
-			}
-		}
-	}
-	
 	public static void bottomUpSort(Comparable[] a) {
 		int n = a.length;
 		Comparable[] aux = new Comparable[a.length];
@@ -46,7 +32,6 @@ public class MergeSort {
 			}
 		}
 	}
-	
 	
 	
 	//mid 的左右都已经是有序的了，
@@ -63,8 +48,6 @@ public class MergeSort {
 		sort(a, aux, middle + 1, hi); // sort right
 		merge(a, aux, low, middle, hi);
 	}
-	
-	
 	
 	/**            i              j  
  	 *            [ ]  [ ]  [ ]  [ ]  [ ]
