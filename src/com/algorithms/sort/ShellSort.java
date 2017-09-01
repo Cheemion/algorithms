@@ -1,6 +1,8 @@
 package com.algorithms.sort;
 
 import java.util.Arrays;
+import java.util.Comparator;
+
 import static com.algorithms.sort.Sorts.*;
 /**
  * 希尔排序 , like 7 sorted and then 3 sorted and 1 soreted. then it is sorted
@@ -50,7 +52,23 @@ public class ShellSort {
 			}
 		}
 	}
+	//非常快  代码精彪，小数组代码有很好的performance
+	private static <T> void sort(T[] a, int[] inSeq, Comparator<? super T> cmp) {
+		int seqIndex = 0;
+		for (; inSeq[seqIndex + 1] < a.length; seqIndex++); 
+		for (; seqIndex >= 0; seqIndex--) {
+			int increment = inSeq[seqIndex];
+			for (int i = increment; i < a.length; i++) {
+				for (int j = i; j - increment >= 0 && less(a[j], a[j - increment], cmp); j = j - increment) 
+					exch(a, j - increment, j);
+			}
+		}
+	}
+	
 	private static void sort(Comparable[] a) {
 		sort(a, INCREMENT_SEQUENCE_SEDGEWICK);
+	}
+	private static <T> void sort(T[] a, Comparator<? super T> cmp) {
+		sort(a, INCREMENT_SEQUENCE_SEDGEWICK, cmp);
 	}
 }

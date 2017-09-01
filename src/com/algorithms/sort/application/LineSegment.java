@@ -51,4 +51,14 @@ public class LineSegment {
         throw new UnsupportedOperationException();
     }
 
+
+	public Point getP() {
+		return p;
+	}
+
+
+	public Point getQ() {
+		return q;
+	}
+
 }

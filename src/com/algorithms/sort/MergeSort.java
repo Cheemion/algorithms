@@ -34,6 +34,7 @@ public class MergeSort {
 	}
 	
 	
+	
 	//mid 的左右都已经是有序的了，
 	//这个是merge方法
 	//a 和辅助 数组的长度需要一致

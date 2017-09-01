@@ -8,6 +8,7 @@ package com.algorithms.sort;
 import static com.algorithms.sort.Sorts.*;
 
 import java.util.Arrays;
+import java.util.Comparator;
 //选择排序,从头到尾遍历一遍，选出第一个最好的，
 //再从第二个位置遍历一遍选出第二个最小的 
 //ect
@@ -30,4 +31,15 @@ public class SelectionSort {
 			exch(a, i, min);
 		}
 	}
+	
+	public static <T> void sort(T[] a, Comparator<? super T> cmp) {
+		for (int i = 0; i < a.length; i++) {
+			int min = i;
+			for (int j = i; j < a.length; j++) {
+				if (less(a[j], a[min], cmp)) min = j;
+			}
+			exch(a, i, min);
+		}
+	}
+	
 }

@@ -103,6 +103,10 @@ public class Point implements Comparable<Point> {
         	else return 0;
         };
     }
+    
+    public double distanceTo(Point that) {
+    	return Math.pow((this.x - that.x), 2) + Math.pow((this.y - that.y), 2);
+    }
 
     /**
      * Returns a string representation of this point.

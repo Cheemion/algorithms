@@ -1,6 +1,7 @@
 package com.algorithms.sort;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Random;
 
 public class Sorts {
@@ -9,6 +10,10 @@ public class Sorts {
 	
 	public static boolean less(Comparable v, Comparable w) {
 		return v.compareTo(w) < 0;
+	}
+	
+	public static <T> boolean less(T v, T w, Comparator<? super T> cmp) {
+		return cmp.compare(v, w) == -1;
 	}
 	
 	public static <T> void exch(T[] a, int i, int j) {
