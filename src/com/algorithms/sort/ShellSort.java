@@ -52,6 +52,7 @@ public class ShellSort {
 			}
 		}
 	}
+	
 	//非常快  代码精彪，小数组代码有很好的performance
 	private static <T> void sort(T[] a, int[] inSeq, Comparator<? super T> cmp) {
 		int seqIndex = 0;
@@ -65,7 +66,7 @@ public class ShellSort {
 		}
 	}
 	
-	private static void sort(Comparable[] a) {
+	public static void sort(Comparable[] a) {
 		sort(a, INCREMENT_SEQUENCE_SEDGEWICK);
 	}
 	private static <T> void sort(T[] a, Comparator<? super T> cmp) {
