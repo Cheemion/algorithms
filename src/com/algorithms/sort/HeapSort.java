@@ -26,8 +26,8 @@ public class HeapSort {
 			sink(a, i, a.length - 1);
 		
 		for (int n = a.length - 1; n > 1; n--) {
-			exch(a, 1, n);
-			sink(a, 1, n - 1);
+			exch(a, 1, n); //最大的数拿到末尾
+			sink(a, 1, n - 1); //把第一个数sink下去
 		}
 	}
 
