@@ -10,7 +10,7 @@ public class SortingSpeedTest {
 		int n = 10000000;
 	    Integer[] ints = new Integer[n];
 	    for (int i = 0; i < n; i++) 
-	    	ints[i] = rand.nextInt(10);
+	    	ints[i] = rand.nextInt();
 	    
 	    long before;
 	    
@@ -48,5 +48,10 @@ public class SortingSpeedTest {
 	    before = new Date().getTime();
 	    QucikSort3Way.sort(ints);
 	    System.out.println("QucikSort3Way is using " + (new Date().getTime() - before) + "milliseconds");
+	    
+	    Sorts.shuffle(ints);
+	    before = new Date().getTime();
+	    HeapSort.sort(ints);
+	    System.out.println("HeapSort is using " + (new Date().getTime() - before) + "milliseconds");
 	}
 }
