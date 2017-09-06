@@ -4,22 +4,6 @@ import static com.algorithms.sort.Sorts.*;
 import java.util.NoSuchElementException;
 public class MinPriorityQueue<T extends Comparable<T>> {
 	
-	public static void main(String[] args) {
-		MinPriorityQueue<Integer> pq = new MinPriorityQueue();
-		pq.insert(1014);
-		pq.insert(101);
-		pq.insert(1011);
-		pq.insert(10);
-		pq.insert(1012);
-		pq.insert(1013);
-		System.out.println("max number :" + pq.delMin());
-		System.out.println("max number :" + pq.delMin());
-		System.out.println("max number :" + pq.delMin());
-		System.out.println("max number :" + pq.delMin());
-		System.out.println("max number :" + pq.delMin());
-		System.out.println("max number :" + pq.delMin());
-	}
-	
 	private static int DEFAULT_CAPACITY = 4;
 	private int size = 0;
 	//第一个元素拿来记录这个queue的size
