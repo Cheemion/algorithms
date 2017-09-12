@@ -41,7 +41,8 @@ public class ArrayQueue<T> implements Queue<T>{
 	public Iterator<T> iterator() {
 		return new ArrayQueueIterator();
 	}
-
+	
+	//并没有控制多线程问题
 	private class ArrayQueueIterator implements Iterator<T> {
 		
 		int first = head;
