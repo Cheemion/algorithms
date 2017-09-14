@@ -1,8 +1,5 @@
 package com.algorithms.search.application;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import com.algorithms.elementary.LinkedStack;
 import com.algorithms.elementary.MinPriorityQueue;
 import com.algorithms.elementary.Stack;
@@ -10,7 +7,8 @@ import com.algorithms.elementary.Stack;
 public class Solver {
 	
 	public static void main(String[] args) {
-		Solver solver = new Solver(new Board( new int[][]{{0,1,3},{4,2,5},{7,8,6}} ));
+		Solver solver = new Solver(new Board( new int[][]{{1,2,3},{4, 5, 0},{7,8,6}} ));
+		
 		if (solver.isSolvable())
 			for (Board b : solver.solution()) {
 				System.out.println(b);
@@ -18,46 +16,53 @@ public class Solver {
 			}
 		else
 			System.out.println("not solvable");
+		
 	}
 	
 	MinPriorityQueue<Board> board = new MinPriorityQueue<>();
-	Stack<Board> storedBoard = new LinkedStack<>();
-	private static boolean isGoal = false;
+	Stack<Board> stack = new LinkedStack<>();
+	Board goal = null;
+	Board initial = null;
 	
     public Solver(Board initial) {
+		this.initial = initial;
     	board.insert(initial);
-    	run(board, storedBoard);
+    	board.insert(initial.twin());
+    	run(board);
     }
     
-    private void run(MinPriorityQueue<Board> board, Stack<Board> storedBoard) {
-    	if (isGoal == true) return;
-    	Board min = board.delMin();
-    	storedBoard.push(min);
-    	if (min.isGoal()) {
-    		isGoal = true;
-    		return;
-    	}
-    	else {
-    		Iterable<Board> neighbors = min.neighbors();
-    		for(Board b : neighbors) {
-    			b.setAncesstor(min);
-    			board.insert(b);
+    private void run(MinPriorityQueue<Board> board) {
+    	
+    	while(true) {
+    		Board min = board.delMin();
+    		//System.out.println(min);
+    		if (min.isGoal()) {
+    			goal = min;
+    			for (Board b = goal; b != null; b = b.getAncesstor()) {
+    				stack.push(b);
+    			}
+    			break;
     		}
-    		run(board, storedBoard);
+    		else {
+        		Iterable<Board> neighbors = min.neighbors();
+           		for(Board b : neighbors) 
+        			board.insert(b);
+    		}
     	}
-    	if (!isGoal)
-    		storedBoard.pop();
+    	
     }
-    
     
     public boolean isSolvable() {
-    	return isGoal == true;
+    	Board pop = stack.pop();
+    	stack.push(pop);
+    	return pop == initial;
     }
+    
     public int moves() {
-    	return storedBoard.size();
+    	return stack.size();
     }
     public Iterable<Board> solution() {
-    	return storedBoard;
+    	return stack;
     }
     
 }

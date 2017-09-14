@@ -7,23 +7,31 @@ public class Board implements Comparable<Board>{
 	
 	public static void main(String[] args) {
 		
-		Board board = new Board( new int[][]{{0,1,3},{4,2,5},{7,8,6}} ); 
+		Board board = new Board( new int[][]{{0,1,3},{4,2,5},{7,8,6}}); 
 		System.out.println("done");
 		
 	}
 	
 	private int[][] blocks;
-	private static int[][] goal = new int[][]{{1,2,3},{4,5,6},{7,8,0}};
+	//private static int[][] goal = new int[][]{{1,2,3},{4,5,6},{7,8,0}};
+	private static int[][] goal = new int[][]{{1,2,3},{4,5,6,}, {7,0,8}};
+	
 	private int hamming;
 	private int manhattan;
 	private int blankI;
 	private int blankJ;
 	private Board ancestor;
-
+	
 	//You may assume that the constructor receives an n-by-n array containing the n2 integers between 0 and n2 − 1
 	//where 0 represents the blank square.
 	// (where blocks[i][j] = block in row i, column j)
-    public Board(int[][] blocks) {
+	
+	public Board(int[][] blocks) { 
+		this(blocks, null);
+	}
+	
+    public Board(int[][] blocks,Board ancestor) {
+    	this.ancestor = ancestor;
     	this.blocks = blocks;
     	for (int i = 0; i < goal.length; i++) {
 			for (int j = 0; j < goal[i].length; j++) {
@@ -57,13 +65,14 @@ public class Board implements Comparable<Board>{
     
     public Board twin() {
     	if (blocks[0][0] == 0 || blocks[0][1] == 0)
-    		return new Board(exchange(1, 0, 1, 1, blocks.clone()));
+    		return new Board(exchange(1, 0, 1, 1, copy(blocks)));
     	else 
-    		return new Board(exchange(0, 0, 0, 1, blocks.clone()));
+    		return new Board(exchange(0, 0, 0, 1, copy(blocks)));
     }
     
     
     public boolean equals(Board other) {
+    	if (other == this) return true;
     	if (this.dimension() != other.dimension()) return false;
     	for (int i = 0; i < blocks.length; i++) {
 			for (int j = 0; j < blocks[i].length; j++) {
@@ -83,7 +92,7 @@ public class Board implements Comparable<Board>{
     		int[][] newBlock = copy(blocks);
     		exchange(blankI, blankJ, blankI, blankJ - 1, newBlock);
     		if (ancestor == null || !ancestor.equals(new Board(newBlock))) 
-    		bag.add(new Board(newBlock));
+    		bag.add(new Board(newBlock, this));
     	}
     	
     	if (blankJ + 1 >=0 && blankJ + 1 < dimension()) {
@@ -94,7 +103,7 @@ public class Board implements Comparable<Board>{
     		exchange(blankI, blankJ, blankI, blankJ + 1, newBlock);
     		
     		if (ancestor == null || !ancestor.equals(new Board(newBlock))) 
-    		bag.add(new Board(newBlock));
+    		bag.add(new Board(newBlock, this));
     	}
     	
     	if (blankI + 1 >=0 && blankI + 1 < dimension()) {
@@ -103,7 +112,7 @@ public class Board implements Comparable<Board>{
     		exchange(blankI, blankJ, blankI + 1, blankJ, newBlock);
     		
     		if (ancestor == null || !ancestor.equals(new Board(newBlock))) 
-    		bag.add(new Board(newBlock));
+    		bag.add(new Board(newBlock, this));
     	}
     	
     	if (blankI - 1 >=0 && blankI - 1 < dimension()) {
@@ -112,7 +121,7 @@ public class Board implements Comparable<Board>{
     		exchange(blankI, blankJ, blankI - 1, blankJ, newBlock);
     		
     		if (ancestor == null || !ancestor.equals(new Board(newBlock))) 
-    		bag.add(new Board(newBlock));
+    		bag.add(new Board(newBlock, this));
     	}
     	return bag;
     }
