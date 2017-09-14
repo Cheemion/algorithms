@@ -5,23 +5,49 @@ import com.algorithms.elementary.Bag;
 
 public class Board implements Comparable<Board>{
 	
+	
+	public static void main(String[] args) {
+		Board b = new Board( new int[][]{{0,1,3},{4,2,5},{7,8,6}} );
+	}
+	
 	private int blocks[][];
-	private Board goal;
+	private Board goal = new Board(new int[][]{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}});
 	private int hamming;
 	private int manhattan;
 	private int blankI;
 	private int blankJ;
+	
+	private Board previousPrevious = null;
 	//You may assume that the constructor receives an n-by-n array containing the n2 integers between 0 and n2 − 1
 	//where 0 represents the blank square.
 	// (where blocks[i][j] = block in row i, column j)
     public Board(int[][] blocks) {
     	this.blocks = blocks;
-    	this.goal = new Board( new int[][]{{1,2,3},{4,5,6},{7,8,9}} );
+    	
+    	//n ^ 2
+    	for (int i = 0; i < goal.blocks.length; i++) {
+			for (int j = 0; j < goal.blocks[i].length; j++) {
+				int value = goal.blocks[i][j];
+				
+				
+				for (int i1 = 0; i1 < blocks.length; i1++) {
+					for (int j1 = 0; j1 < blocks.length; j1++) {
+						if (blocks[i1][j1] == 0) { blankI = i1; blankJ = j1; }
+						if (blocks[i1][j1] == value) {
+							if (i1 != i || j1 != j) hamming++;
+							manhattan = manhattan + Math.abs(i1 - i) + Math.abs(j1 - j);
+						}
+					}
+				}
+				
+				throw new RuntimeException("the contained number is not the same");
+			}
+		}
     }
     
     public Board(int[][] blocks, Board goal) {
     	this.blocks = blocks;
-    	this.goal = goal;
+    	
     	//n ^ 2
     	for (int i = 0; i < goal.blocks.length; i++) {
 			for (int j = 0; j < goal.blocks[i].length; j++) {
@@ -75,12 +101,17 @@ public class Board implements Comparable<Board>{
     	return true;
     }
     public Iterable<Board> neighbors() {
+    	
+    	
     	Bag<Board> bag = new ArrayBag<>();
     	
     	if (blankJ - 1 >=0 && blankJ - 1 < dimension()) {
     		//左边移动
     		int[][] newBlock = blocks.clone();
     		exchange(blankI, blankJ, blankI, blankJ - 1, newBlock);
+       		if (previousPrevious != null)
+    			if (new Board(newBlock, goal).equals(previousPrevious));
+    		else
     		bag.add(new Board(newBlock, goal));
     	}
     	
@@ -88,6 +119,9 @@ public class Board implements Comparable<Board>{
     		//右边边移动
     		int[][] newBlock = blocks.clone();
     		exchange(blankI, blankJ, blankI, blankJ + 1, newBlock);
+      		if (previousPrevious != null)
+    			if (new Board(newBlock, goal).equals(previousPrevious));
+    		else
     		bag.add(new Board(newBlock, goal));
     	}
     	
@@ -95,6 +129,9 @@ public class Board implements Comparable<Board>{
     		//下边移动
     		int[][] newBlock = blocks.clone();
     		exchange(blankI, blankJ, blankI + 1, blankJ, newBlock);
+      		if (previousPrevious != null)
+    			if (new Board(newBlock, goal).equals(previousPrevious));
+    		else
     		bag.add(new Board(newBlock, goal));
     	}
     	
@@ -102,6 +139,9 @@ public class Board implements Comparable<Board>{
     		//上边移动
     		int[][] newBlock = blocks.clone();
     		exchange(blankI, blankJ, blankI - 1, blankJ, newBlock);
+      		if (previousPrevious != null)
+    			if (new Board(newBlock, goal).equals(previousPrevious));
+    		else
     		bag.add(new Board(newBlock, goal));
     	}
     	return bag;
@@ -131,8 +171,19 @@ public class Board implements Comparable<Board>{
 		if (o == null) throw new NullPointerException();
 		if (manhattan > o.manhattan) return 1;
 		else if (manhattan < o.manhattan) return -1;
-		
 		return 0;
+	}
+
+
+
+	public Board getPreviousPrevious() {
+		return previousPrevious;
+	}
+
+
+
+	public void setPreviousPrevious(Board previousPrevious) {
+		this.previousPrevious = previousPrevious;
 	}
     
 }
