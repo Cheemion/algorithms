@@ -1,48 +1,57 @@
 package com.algorithms.search.application;
 
-import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.algorithms.elementary.LinkedStack;
 import com.algorithms.elementary.MinPriorityQueue;
-import com.algorithms.elementary.Queue;
 import com.algorithms.elementary.Stack;
 
 public class Solver {
 	
-	
 	public static void main(String[] args) {
 		Solver solver = new Solver(new Board( new int[][]{{0,1,3},{4,2,5},{7,8,6}} ));
-		for (Board b : solver.solution()) {
-			System.out.println(b);
-			System.out.println("\n");
-		}
+		if (solver.isSolvable())
+			for (Board b : solver.solution()) {
+				System.out.println(b);
+				System.out.println("\n");
+			}
+		else
+			System.out.println("not solvable");
 	}
 	
 	MinPriorityQueue<Board> board = new MinPriorityQueue<>();
 	Stack<Board> storedBoard = new LinkedStack<>();
+	private static boolean isGoal = false;
+	
     public Solver(Board initial) {
     	board.insert(initial);
-    	run(storedBoard);
+    	run(board, storedBoard);
     }
     
-    private void run(Stack<Board> stack) {
+    private void run(MinPriorityQueue<Board> board, Stack<Board> storedBoard) {
+    	if (isGoal == true) return;
     	Board min = board.delMin();
-    	stack.push(min);
-    	if (min.isGoal()) return;
+    	storedBoard.push(min);
+    	if (min.isGoal()) {
+    		isGoal = true;
+    		return;
+    	}
     	else {
     		Iterable<Board> neighbors = min.neighbors();
     		for(Board b : neighbors) {
-    			b.setPreviousPrevious(min);
+    			b.setAncesstor(min);
     			board.insert(b);
     		}
-    		run(stack);
+    		run(board, storedBoard);
     	}
-    	stack.pop();
+    	if (!isGoal)
+    		storedBoard.pop();
     }
     
     
     public boolean isSolvable() {
-    	return true;
+    	return isGoal == true;
     }
     public int moves() {
     	return storedBoard.size();
