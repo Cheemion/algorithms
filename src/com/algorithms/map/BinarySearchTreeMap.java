@@ -27,7 +27,6 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 	private Node<K, V> put(Node<K, V> node, K k, V v) {
 		if (node == null) return new Node<>(k, v, 1);
 		int cmp = node.k.compareTo(k);
-		
 		if (cmp > 0) { //node的k大一点 放到左边的数中
 			node.left = put(node.left, k, v);
 		} else if (cmp < 0) { //node的k小一点 放到右边的数中
@@ -61,28 +60,25 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 		}
 		
 	}
-	
 
 	@Override
 	public void delete(K k) {
 		
 	}
 	
-	private void delete(Node<K, V> node, K k) {
+	private Node<K, V> delete(Node<K, V> node, K k) {
+		
 		int cmp = node.k.compareTo(k);
 		if (cmp > 0) delete(node.left, k);
 		else if (cmp < 0) delete(node.right, k);
-		else { 					//equal
-			
+		else {	//equal  find the element that needs to be deleted
 		}
 	}
 	
 	private Node<K, V> deleteMin(Node<K, V> node) {
-		for (; node.left != null; node = node.left);
-		return node;
+		
+		return delete(node,)
 	}
-	
-	
 	
 	@Override
 	public void deleteMin() {
