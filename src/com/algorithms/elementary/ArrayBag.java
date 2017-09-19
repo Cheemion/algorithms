@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 public class ArrayBag<T> implements Bag<T>{
 	
-	
 	public static void main(String[] args) {
 		Bag<Integer> bag = new LinkedBag<>();
 		bag.add(1);

@@ -3,7 +3,9 @@ package com.algorithms.map;
 import java.util.NoSuchElementException;
 
 import com.algorithms.elementary.ArrayBag;
+import com.algorithms.elementary.ArrayQueue;
 import com.algorithms.elementary.Bag;
+import com.algorithms.elementary.Queue;
 
 /**
  * 基于二叉树的map
@@ -75,14 +77,16 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 		}
 	}
 	
-	@Override
-	public void deleteMin() {
-		delete(min());
-	}
-
 	private Node<K, V> deleteMin(Node<K, V> node) {
 		for (; node.left != null; node = node.left);
 		return node;
+	}
+	
+	
+	
+	@Override
+	public void deleteMin() {
+		delete(min());
 	}
 	
 	@Override
@@ -226,34 +230,37 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 			return node.k;
 		
 	}
-
-
+	
+	//最小的先加入bag
+	private void keys(Node<K, V> node, K lo, K hi, Queue<K> queue) {
+		if (node == null) return;
+		int cmpToLow = node.k.compareTo(lo);
+		int cmpToHi = node.k.compareTo(hi);
+		
+		if (cmpToLow < 0) { //超出了lo的范围
+			keys(node.left, lo, hi, queue);
+		} else if (cmpToHi > 0) { //超出了hi的范围
+			keys(node.right, lo, hi, queue);
+		} else { //在2个范围内
+			keys(node.left, lo, hi, queue);
+			queue.enqueue(node.k);
+			keys(node.right, lo, hi, queue);
+		}
+	}
 	
 	// keys in [lo , hi] in sorted order
 	@Override
 	public Iterable<K> keys(K lo, K hi) {
-		Bag<K> bag = new ArrayBag<>();
-		keys(root, lo, hi, bag);
-		return bag;
-	}
-	
-	//好像写错了
-	private void keys(Node<K, V> node, K lo, K hi, Bag<K> bag) {
-		if (node == null) return;
-		int cmpToLow = node.k.compareTo(lo);
-		int cmpToHi = node.k.compareTo(hi);
-		if (cmpToLow >= 0 && cmpToHi <= 0) {
-			keys(node.left, lo, hi, bag);
-			bag.add(node.k);
-			keys(node.right, lo, hi, bag);
-		}
+		Queue<K> queue = new ArrayQueue<>();
+		keys(root, lo, hi, queue);
+		return queue;
 	}
 	
 	@Override
 	public Iterable<K> keys() {
-		Bag<K> bag = new ArrayBag<>();
-		keys(root, min(), max(), bag);
-		return bag;
+		Queue<K> queue = new ArrayQueue<>();
+		keys(root, min(), max(), queue);
+		return queue;
 	}
 	
 	private class Node<K, V> {
