@@ -109,31 +109,22 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 		return root.size;
 	}
 	
-	//waitting for implement
 	@Override
 	public int size(K lo, K hi) {
-		
-		if (node == null) return;
-		int cmpToLow = node.k.compareTo(lo);
-		int cmpToHi = node.k.compareTo(hi);
-		if (cmpToLow >= 0 && cmpToHi <= 0) {
-			keys(node.left, lo, hi, bag);
-			bag.add(node.k);
-			keys(node.right, lo, hi, bag);
-		}
-		
-		int size = 0;
-		return 0;
+		return size(root, lo, hi);
 	}
-	
 	
 	private int size(Node<K, V> node, K lo, K hi) {
 		if (node == null) return 0;
 		int cmpToLow = node.k.compareTo(lo);
 		int cmpToHi = node.k.compareTo(hi);
-		if (cmpToLow >= 0 && cmpToHi <= 0) 
-			return size(node.left, lo, hi) +  size(node.right, lo, hi) + 1;
-		
+		if (cmpToLow < 0) { //node is less than lo
+			return size(node.right, lo, hi);
+		} else if (cmpToHi > 0) { // node is large than hi
+			return size(node.left, lo, hi);
+		} else { // node is between lo and hi, [lo, hi]
+			return size(node.right, lo, hi) + size(node.left, lo, hi) + 1;
+		}
 	}
 	
 	@Override
