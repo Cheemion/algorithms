@@ -14,7 +14,7 @@ public class Board implements Comparable<Board>{
 	
 	private int[][] blocks;
 	//private static int[][] goal = new int[][]{{1,2,3},{4,5,6},{7,8,0}};
-	private static int[][] goal = new int[][]{{1,2,3},{4,5,6,}, {7,0,8}};
+	private static int[][] goal = new int[][]{{1,2,3},{4,5,6}, {7,8,0}};
 	
 	private int hamming;
 	private int manhattan;
