@@ -17,6 +17,25 @@ import com.algorithms.elementary.Queue;
  */
 public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V>{
 	
+	public static void main(String[] args) {
+		Map<Integer, Integer> map = new BinarySearchTreeMap<>();
+		map.put(10, 10);
+		map.put(9, 9);
+		map.put(15, 15);
+		map.put(5, 5);
+		map.put(12, 12);
+		map.put(3, 3);
+		map.put(7, 7);
+		
+		System.out.println("map.isEmpty() = " + map.isEmpty());
+		System.out.println("map.size() = " + map.size());
+		System.out.println("map.size(9, 15) = " + map.size(9, 15));
+		System.out.println("map.ceiling(13) = " + map.ceiling(13));
+		System.out.println("map.floor(16) = " + map.floor(16));
+		System.out.println("map.size(9, 15) = " + map.size(9, 15));
+		System.out.println("map.rank(10) = " + map.rank(10));
+	}
+	
 	private Node<K, V> root;
 	
 	@Override
@@ -63,31 +82,49 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 
 	@Override
 	public void delete(K k) {
-		
+		delete(root, k);
 	}
-	
+	//delete the k in the node tree and reset the size prorperty of this tree and subtrees to correct value 
 	private Node<K, V> delete(Node<K, V> node, K k) {
+		if (node == null) return null;  //没有找到这个node
 		
 		int cmp = node.k.compareTo(k);
-		if (cmp > 0) delete(node.left, k);
-		else if (cmp < 0) delete(node.right, k);
-		else {	//equal  find the element that needs to be deleted
+		if (cmp > 0) {
+			node.left = delete(node.left, k);
+			node.size = size(node.left) + size(node.right) + 1;
+			return node;
+		} else if (cmp < 0) {
+			node.right = delete(node.right, k);
+			node.size = size(node.left) + size(node.right) + 1;
+			return node;
+		} else {	//hit the key 
+			if (node.right == null) //if the right node is null then just replace this node with left node
+				return node.left;
+			else if (node.left == null) // if the left node is null then just replace this node with right node
+				return node.right;
+			else {
+				return deleteMin(node.right); // if both the subnodes are not null replace this node with the smallest node in the right sub node
+			}
 		}
 	}
 	
+	//删除从参数node开始的最小的node
 	private Node<K, V> deleteMin(Node<K, V> node) {
-		
-		return delete(node,)
+		return delete(node, min(node));
+	}
+	
+	private Node<K, V> deleteMax(Node<K, V> node) {
+		return delete(node, max(node));
 	}
 	
 	@Override
 	public void deleteMin() {
-		delete(min());
+		deleteMin(root);
 	}
 	
 	@Override
 	public void deleteMax() {
-		delete(max());
+		deleteMax(root);
 	}
 	
 	@Override
@@ -125,14 +162,23 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 	
 	@Override
 	public K min() {
-		Node<K, V> node;
-		for (node = root; node.left != null; node = node.left);
+		return min(root);
+	}
+	
+	//get the smallest node in the given node
+	private K min(Node<K, V> node) {
+		if (node == null) return null;
+		for (; node.left != null; node = node.left);
 		return node.k;
 	}
-
+	
 	@Override
 	public K max() {
-		Node<K, V> node;
+		return max(root);
+	}
+	//get the most max node in the given node
+	private K max(Node<K, V> node) {
+		if (node == null) return null;
 		for (node = root; node.right != null; node = node.right);
 		return node.k;
 	}
@@ -144,14 +190,15 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 	}
 	
 	private K floor(Node<K, V> node, K k) {
+		
 		if (node == null) return null;
 		int cmp = node.k.compareTo(k); 
 		
 		if (cmp > 0) return floor(node.left, k); //node.k 大于 k so we need to find the k in the left tree
 		else if (cmp < 0) {   //node.k is less then k
 			K returnValue = node.k;	 //so node.k might be the value .but iam not sure we shall see
-			if (floor(node.left, k) != null)  //如果发现right 树中还有更接近k then we should return that value
-				returnValue = floor(node.left, k);
+			if (floor(node.right, k) != null)  //如果发现right 树中还有更接近k then we should return that value
+				returnValue = floor(node.right, k);
 		   return returnValue;
 		} else {
 			return node.k;
@@ -203,7 +250,7 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 	
 	@Override
 	public K select(int k) {
-		if (k > root.size - 1) throw new NoSuchElementException("the int k is large than size - 1");
+		if (k > root.size - 1) throw new NoSuchElementException();
 		return select(root, k);
 	}
 	
@@ -218,7 +265,7 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 		
 	}
 	
-	//最小的先加入bag
+	//最小的先加入queue
 	private void keys(Node<K, V> node, K lo, K hi, Queue<K> queue) {
 		if (node == null) return;
 		int cmpToLow = node.k.compareTo(lo);
