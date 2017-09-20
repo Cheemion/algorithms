@@ -26,14 +26,69 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 		map.put(12, 12);
 		map.put(3, 3);
 		map.put(7, 7);
+		map.put(7, 7);
 		
 		System.out.println("map.isEmpty() = " + map.isEmpty());
 		System.out.println("map.size() = " + map.size());
 		System.out.println("map.size(9, 15) = " + map.size(9, 15));
 		System.out.println("map.ceiling(13) = " + map.ceiling(13));
 		System.out.println("map.floor(16) = " + map.floor(16));
-		System.out.println("map.size(9, 15) = " + map.size(9, 15));
+		System.out.println("map.get(7) = " + map.get(7));
+		System.out.println("map.max() = " + map.max());
+		System.out.println("map.min() = " + map.min());
+		System.out.println("map.select(2) = " + map.select(2));
+		System.out.println("map.contains(2) = " + map.contains(2));
 		System.out.println("map.rank(10) = " + map.rank(10));
+		
+		System.out.print("map.keys() = ");
+		for (Integer i : map.keys()) 
+			System.out.print(i + " ");
+		
+		System.out.print("map.keys(9, 15) = ");
+		for (Integer i : map.keys(9, 15)) 
+			System.out.print(i + " ");
+		System.out.println("******************");
+		System.out.println("test deleting operation");
+		System.out.println("map.deleteMin()");
+		map.deleteMin();
+		System.out.print("map.keys() = ");
+		for (Integer i : map.keys()) 
+			System.out.print(i + " ");
+		System.out.println("");
+		System.out.println("map.deleteMax()");
+		map.deleteMax();
+		System.out.print("map.keys() = ");
+		for (Integer i : map.keys()) 
+			System.out.print(i + " ");
+		
+		System.out.println("");
+		System.out.println("map.delete(9)");
+		map.delete(9);
+		System.out.print("map.keys() = ");
+		for (Integer i : map.keys()) 
+			System.out.print(i + " ");
+		System.out.println(" ");
+		System.out.println("test again in case of some bugs in deleting operation");
+		System.out.println("map.isEmpty() = " + map.isEmpty());
+		System.out.println("map.size() = " + map.size());
+		System.out.println("map.size(9, 15) = " + map.size(9, 15));
+		System.out.println("map.ceiling(13) = " + map.ceiling(13));
+		System.out.println("map.floor(16) = " + map.floor(16));
+		System.out.println("map.get(7) = " + map.get(7));
+		System.out.println("map.max() = " + map.max());
+		System.out.println("map.min() = " + map.min());
+		System.out.println("map.select(2) = " + map.select(2));
+		System.out.println("map.contains(2) = " + map.contains(2));
+		System.out.println("map.rank(10) = " + map.rank(10));
+		
+		System.out.print("map.keys() = ");
+		for (Integer i : map.keys()) 
+			System.out.print(i + " ");
+		
+		System.out.print("map.keys(9, 15) = ");
+		for (Integer i : map.keys(9, 15)) 
+			System.out.print(i + " ");
+		System.out.println("******************");
 	}
 	
 	private Node<K, V> root;
