@@ -15,7 +15,7 @@ import com.algorithms.elementary.Queue;
  */
 public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<K, V> {
 	
-	private Node<K, V> root;
+	private Node root;
 	
 	@Override
 	public void put(K k, V v) {
@@ -23,9 +23,9 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 		root.color = Color.BLACK; // reset the root color to black
 	}
 
-	private Node<K, V> put(Node<K, V> node, K k, V v) {
+	private Node put(Node node, K k, V v) {
 		if (node == null) //find the place of this new node
-			return new Node<>(k, v, 1, Color.RED);
+			return new Node(k, v, 1, Color.RED);
 		int cmp = node.k.compareTo(k);
 		
 		if 		(cmp > 0)  node.left = put(node.left, k, v); // node的k大一点 放到左边的tree中
@@ -42,7 +42,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 	}
 
 	// 判断size的大小
-	private int size(Node<K, V> node) {
+	private int size(Node node) {
 		if (node == null)
 			return 0;
 		return node.size;
@@ -53,7 +53,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 		return get(root, k);
 	}
 
-	private V get(Node<K, V> node, K k) {
+	private V get(Node node, K k) {
 
 		if (node == null)
 			return null; // not find
@@ -69,59 +69,33 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 
 	@Override
 	public void delete(K k) {
-		delete(root, k);
 	}
 
 	// delete the k in the node tree and reset the size prorperty of this tree
 	// and subtrees to correct value
-	private Node<K, V> delete(Node<K, V> node, K k) {
-		if (node == null)
-			return null; // 没有找到这个node
-
-		int cmp = node.k.compareTo(k);
-		if (cmp > 0) {
-			node.left = delete(node.left, k);
-			node.size = size(node.left) + size(node.right) + 1;
-			return node;
-		} else if (cmp < 0) {
-			node.right = delete(node.right, k);
-			node.size = size(node.left) + size(node.right) + 1;
-			return node;
-		} else { // hit the key
-			if (node.right == null) // if the right node is null then just
-									// replace this node with left node
-				return node.left;
-			else if (node.left == null) // if the left node is null then just
-										// replace this node with right node
-				return node.right;
-			else {
-				return deleteMin(node.right); // if both the subnodes are not
-												// null replace this node with
-												// the smallest node in the
-												// right sub node
-			}
-		}
+	private Node delete(Node node, K k) {
+		
 	}
 
 	// 删除从参数node开始的最小的node
-	private Node<K, V> deleteMin(Node<K, V> node) {
-		return delete(node, min(node));
+	private Node deleteMin(Node node) {
+		
 	}
 
-	private Node<K, V> deleteMax(Node<K, V> node) {
-		return delete(node, max(node));
+	private Node deleteMax(Node node) {
+		
 	}
 
 	@Override
 	public void deleteMin() {
-		deleteMin(root);
 	}
 
 	@Override
 	public void deleteMax() {
-		deleteMax(root);
 	}
 
+	
+	
 	@Override
 	public boolean contains(K k) {
 		return get(k) != null;
@@ -142,7 +116,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 		return size(root, lo, hi);
 	}
 
-	private int size(Node<K, V> node, K lo, K hi) {
+	private int size(Node node, K lo, K hi) {
 		if (node == null)
 			return 0;
 		int cmpToLow = node.k.compareTo(lo);
@@ -162,7 +136,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 	}
 
 	// get the smallest node in the given node
-	private K min(Node<K, V> node) {
+	private K min(Node node) {
 		if (node == null)
 			return null;
 		for (; node.left != null; node = node.left);
@@ -175,7 +149,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 	}
 
 	// get the most max node in the given node
-	private K max(Node<K, V> node) {
+	private K max(Node node) {
 		if (node == null)
 			return null;
 		for (node = root; node.right != null; node = node.right);
@@ -188,7 +162,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 		return floor(root, k);
 	}
 
-	private K floor(Node<K, V> node, K k) {
+	private K floor(Node node, K k) {
 
 		if (node == null)
 			return null;
@@ -215,7 +189,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 		return ceiling(root, k);
 	}
 
-	private K ceiling(Node<K, V> node, K k) {
+	private K ceiling(Node node, K k) {
 
 		if (node == null)
 			return null;
@@ -242,7 +216,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 		return rank(root, k);
 	}
 
-	private int rank(Node<K, V> node, K k) {
+	private int rank(Node node, K k) {
 		if (node == null)
 			return 0;
 		int cmp = node.k.compareTo(k);
@@ -261,7 +235,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 		return select(root, k);
 	}
 
-	private K select(Node<K, V> node, int k) {
+	private K select(Node node, int k) {
 
 		if (size(node.left) > k) {
 			return select(node.left, k);
@@ -273,7 +247,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 	}
 
 	// 最小的先加入queue
-	private void keys(Node<K, V> node, K lo, K hi, Queue<K> queue) {
+	private void keys(Node node, K lo, K hi, Queue<K> queue) {
 		if (node == null)
 			return;
 		int cmpToLow = node.k.compareTo(lo);
@@ -305,7 +279,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 		return queue;
 	}
 	
-	private void flipColors(Node<K, V> h) {
+	private void flipColors(Node h) {
 		assert(!isRed(h));
 		assert(isRed(h.right));
 		assert(isRed(h.left));
@@ -317,10 +291,10 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 	
 	
 	//右树是红link的时候,turn this red link to left
-	private Node<K,V> rotateLeft(Node<K, V> h) {
+	private Node rotateLeft(Node  h) {
 		assert(isRed(h.right));
 		
-		Node<K, V> x = h.right;  //change　the pointers
+		Node  x = h.right;  //change　the pointers
 		h.right = x.left;
 		x.left = h;
 		
@@ -333,10 +307,10 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 	}
 	
 	//左树是红link的时候,turn this red link to left
-	private Node<K,V> rotateRight(Node<K, V> h) {
+	private Node rotateRight(Node  h) {
 		assert(isRed(h.left));
 		
-		Node<K, V> x = h.left;
+		Node  x = h.left;
 		h.left = x.right;
 		x.right = h;
 		
@@ -349,17 +323,17 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 		return x;
 	}
 	
-	private boolean isRed(Node<K, V> x) {
+	private boolean isRed(Node x) {
 		if (x == null) return false;
 		return x.color == Color.RED;
 	}
 	
 	
-	private class Node<K, V> {
+	private class Node {
 		private K k;
 		private V v;
-		private Node<K, V> left;
-		private Node<K, V> right;
+		private Node left;
+		private Node right;
 		private int size;
 		private Color color;
 
