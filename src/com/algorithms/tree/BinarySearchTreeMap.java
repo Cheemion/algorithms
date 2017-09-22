@@ -28,6 +28,7 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 		map.put(7, 7);
 		map.put(7, 7);
 		
+		
 		System.out.println("map.isEmpty() = " + map.isEmpty());
 		System.out.println("map.size() = " + map.size());
 		System.out.println("map.size(9, 15) = " + map.size(9, 15));
@@ -89,6 +90,7 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 		for (Integer i : map.keys(9, 15)) 
 			System.out.print(i + " ");
 		System.out.println("******************");
+		
 	}
 	
 	private Node<K, V> root;
@@ -137,7 +139,7 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 
 	@Override
 	public void delete(K k) {
-		delete(root, k);
+		root = delete(root, k);
 	}
 	//delete the k in the node tree and reset the size prorperty of this tree and subtrees to correct value 
 	private Node<K, V> delete(Node<K, V> node, K k) {
@@ -158,28 +160,32 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 			else if (node.left == null) // if the left node is null then just replace this node with right node
 				return node.right;
 			else {
-				return deleteMin(node.right); // if both the subnodes are not null replace this node with the smallest node in the right sub node
+				// if both the subnodes are not null replace this node with the smallest node in the right sub node
+				Node<K, V> minNode = min(node.right);
+				deleteMin(node.right);
+				minNode.left = node.left;
+				minNode.right = node.right;
+				return minNode;
 			}
 		}
 	}
 	
 	//删除从参数node开始的最小的node
 	private Node<K, V> deleteMin(Node<K, V> node) {
-		return delete(node, min(node));
-	}
-	
-	private Node<K, V> deleteMax(Node<K, V> node) {
-		return delete(node, max(node));
+		if (node.left == null) return node.right;
+		else node.left = deleteMin(node.left);
+		node.size = size(node.left) + size(node.right) + 1;
+		return node;
 	}
 	
 	@Override
 	public void deleteMin() {
-		deleteMin(root);
+		delete(root, min());
 	}
 	
 	@Override
 	public void deleteMax() {
-		deleteMax(root);
+		delete(root, max());
 	}
 	
 	@Override
@@ -194,7 +200,7 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 
 	@Override
 	public int size() {
-		return root.size;
+		return size(root);
 	}
 	
 	@Override
@@ -217,25 +223,30 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 	
 	@Override
 	public K min() {
-		return min(root);
+		Node<K, V> min = min(root);
+		if (min == null) return null;
+		return min.k;
 	}
 	
 	//get the smallest node in the given node
-	private K min(Node<K, V> node) {
+	private Node<K, V> min(Node<K, V> node) {
 		if (node == null) return null;
 		for (; node.left != null; node = node.left);
-		return node.k;
+		return node;
 	}
 	
 	@Override
 	public K max() {
-		return max(root);
+		Node<K, V> max = max(root);
+		if (max == null) return null;
+		return max.k;
 	}
+	
 	//get the most max node in the given node
-	private K max(Node<K, V> node) {
+	private Node<K, V> max(Node<K, V> node) {
 		if (node == null) return null;
-		for (node = root; node.right != null; node = node.right);
-		return node.k;
+		for (; node.right != null; node = node.right);
+		return node;
 	}
 	
 	//return　the key that is less or equal to the paramter k
@@ -305,6 +316,7 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 	
 	@Override
 	public K select(int k) {
+		if (root == null) throw new NoSuchElementException();
 		if (k > root.size - 1) throw new NoSuchElementException();
 		return select(root, k);
 	}
@@ -360,6 +372,20 @@ public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V
 		private int size;
 		Node(K k, V v) { this.k = k; this.v = v; }
 		Node(K k, V v, int size) { this.k = k; this.v = v; this.size = size;}
+		
+		@Override
+		public String toString() {
+			return v.toString();
+		}
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (K k : keys()) {
+			sb.append(k);
+			sb.append(" ");
+		}
+		return sb.toString();
+	}
 }

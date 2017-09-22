@@ -69,12 +69,29 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 
 	@Override
 	public void delete(K k) {
+		
 	}
 
 	// delete the k in the node tree and reset the size prorperty of this tree
 	// and subtrees to correct value
 	private Node delete(Node node, K k) {
+		if (node == null) return null;
+		int cmp = node.k.compareTo(k);
 		
+		if (cmp > 0) { // node.k > k  enter the left subtree
+			if (isRed(node.left) || isRed(node.left.left)) { //左子节点不是2-节点
+				node.left = delete(node.left, k);
+				return node;
+			} if (!isRed(node.left) && !isRed(node.left.left) && ()) { // 左节点是2-节点 
+				node.left.color = Color.RED; 
+				node.right.color = Color.RED;
+			} else if ()
+			node.left = delete(node.left,k);
+			return node;
+		} else if (cmp < 0) { // node.k < k
+			return node;
+		} else {	//hit the key 
+		}
 	}
 
 	// 删除从参数node开始的最小的node
@@ -88,6 +105,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 
 	@Override
 	public void deleteMin() {
+		
 	}
 
 	@Override
@@ -152,7 +170,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 	private K max(Node node) {
 		if (node == null)
 			return null;
-		for (node = root; node.right != null; node = node.right);
+		for (; node.right != null; node = node.right);
 		return node.k;
 	}
 
