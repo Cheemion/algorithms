@@ -1,4 +1,4 @@
-package com.algorithms.map;
+package com.algorithms.tree;
 
 import java.util.NoSuchElementException;
 
@@ -20,20 +20,24 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 	@Override
 	public void put(K k, V v) {
 		root = put(root, k, v);
+		root.color = Color.BLACK; // reset the root color to black
 	}
 
 	private Node<K, V> put(Node<K, V> node, K k, V v) {
-		if (node == null)
-			return new Node<>(k, v, 1);
+		if (node == null) //find the place of this new node
+			return new Node<>(k, v, 1, Color.RED);
 		int cmp = node.k.compareTo(k);
-		if (cmp > 0) { // node的k大一点 放到左边的数中
-			node.left = put(node.left, k, v);
-		} else if (cmp < 0) { // node的k小一点 放到右边的数中
-			node.right = put(node.right, k, v);
-		} else
-			node.v = v;
-
+		
+		if 		(cmp > 0)  node.left = put(node.left, k, v); // node的k大一点 放到左边的tree中
+		else if (cmp < 0)  node.right = put(node.right, k, v); // node的k小一点 放到右边的tree中
+		else			   node.v = v; //hit
+		
+		if (isRed(node.right) && !isRed(node.left)) node = rotateLeft(node);
+		if (isRed(node.left) && isRed(node.left.left)) node = rotateRight(node);
+		if (isRed(node.right) && isRed(node.left)) flipColors(node);
+		
 		node.size = size(node.left) + size(node.right) + 1;
+		
 		return node;
 	}
 
@@ -161,8 +165,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 	private K min(Node<K, V> node) {
 		if (node == null)
 			return null;
-		for (; node.left != null; node = node.left)
-			;
+		for (; node.left != null; node = node.left);
 		return node.k;
 	}
 
@@ -175,8 +178,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 	private K max(Node<K, V> node) {
 		if (node == null)
 			return null;
-		for (node = root; node.right != null; node = node.right)
-			;
+		for (node = root; node.right != null; node = node.right);
 		return node.k;
 	}
 
@@ -303,27 +305,36 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 		return queue;
 	}
 	
+	private void flipColors(Node<K, V> h) {
+		assert(!isRed(h));
+		assert(isRed(h.right));
+		assert(isRed(h.left));
+		
+		h.color = Color.RED;
+		h.left.color = Color.BLACK;
+		h.right.color = Color.BLACK;
+	}
 	
 	
 	//右树是红link的时候,turn this red link to left
 	private Node<K,V> rotateLeft(Node<K, V> h) {
-		if (!isRed(h.right)) throw new RuntimeException("rotateLeft is not suitalbe for the right node which is black");
+		assert(isRed(h.right));
 		
-		Node<K, V> x = h.right;
+		Node<K, V> x = h.right;  //change　the pointers
 		h.right = x.left;
 		x.left = h;
 		
-		x.color = h.color;
+		x.color = h.color; //change the colors
 		h.color = Color.RED;
 		
-		x.size = h.size;
+		x.size = h.size; //change the sizes
 		h.size = size(h.left) + size(h.right) + 1;
 		return x;
 	}
 	
 	//左树是红link的时候,turn this red link to left
 	private Node<K,V> rotateRight(Node<K, V> h) {
-		if (!isRed(h.left)) throw new RuntimeException("rotateRight is not suitalbe for the left node which is black");
+		assert(isRed(h.left));
 		
 		Node<K, V> x = h.left;
 		h.left = x.right;
@@ -352,18 +363,13 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 		private int size;
 		private Color color;
 
-		Node(K k, V v, int size) {
-			this.k = k;
-			this.v = v;
-			this.size = size;
-		}
-		
 		Node(K k, V v, int size, Color color) {
 			this.k = k;
 			this.v = v;
 			this.size = size;
 			this.color = color;
 		}
+		
 	}
 	
 	private enum Color {

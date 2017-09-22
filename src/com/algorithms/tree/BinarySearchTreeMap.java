@@ -1,4 +1,4 @@
-package com.algorithms.map;
+package com.algorithms.tree;
 
 import java.util.NoSuchElementException;
 

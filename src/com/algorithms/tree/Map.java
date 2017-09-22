@@ -1,4 +1,4 @@
-package com.algorithms.map;
+package com.algorithms.tree;
 
 public interface Map<K extends Comparable<K>, V> {
 	void put(K k, V v);
