@@ -98,11 +98,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 	private Node deleteMin(Node node) {
 		
 	}
-
-	private Node deleteMax(Node node) {
-		
-	}
-
+	
 	@Override
 	public void deleteMin() {
 		
@@ -150,30 +146,34 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 
 	@Override
 	public K min() {
-		return min(root);
+		Node min = min(root);
+		if (min == null) return null;
+		return min.k;
 	}
-
-	// get the smallest node in the given node
-	private K min(Node node) {
-		if (node == null)
-			return null;
+	
+	//get the smallest node in the given node
+	private Node min(Node node) {
+		if (node == null) return null;
+		
 		for (; node.left != null; node = node.left);
-		return node.k;
+		return node;
 	}
+	
 
 	@Override
 	public K max() {
-		return max(root);
+		Node max = max(root);
+		if (max == null) return null;
+		return max.k;
 	}
-
-	// get the most max node in the given node
-	private K max(Node node) {
-		if (node == null)
-			return null;
+	
+	//get the most max node in the given node
+	private Node max(Node node) {
+		if (node == null) return null;
 		for (; node.right != null; node = node.right);
-		return node.k;
+		return node;
 	}
-
+	
 	// return the key that is less or equal to the paramter k
 	@Override
 	public K floor(K k) {
