@@ -4,7 +4,7 @@ package com.algorithms.tree;
  * @author altro
  *
  */
-public class TreeOf234 <K extends Comparable<K>, V> implements Map<K, V>{
+public class LeftLeaningRedBlack234Tree <K extends Comparable<K>, V> implements Map<K, V>{
 
 	@Override
 	public void put(K k, V v) {

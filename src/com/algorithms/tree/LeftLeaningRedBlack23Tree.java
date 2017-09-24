@@ -7,13 +7,12 @@ import com.algorithms.elementary.Queue;
 /**
  * 左倾红黑树
  * 这个红黑树只是实现了平衡2-3叉树
- * 也可以专门写一个平衡2-3X树
  * @author altro
  *
  * @param <K>
  * @param <V>
  */
-public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<K, V> {
+public class LeftLeaningRedBlack23Tree <K extends Comparable<K>, V> implements Map<K, V> {
 	
 	private Node root;
 	
@@ -72,31 +71,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 		
 	}
 
-	// delete the k in the node tree and reset the size prorperty of this tree
-	// and subtrees to correct value
 	private Node delete(Node node, K k) {
-		if (node == null) return null;
-		int cmp = node.k.compareTo(k);
-		
-		if (cmp > 0) { // node.k > k  enter the left subtree
-			if (isRed(node.left) || isRed(node.left.left)) { //左子节点不是2-节点
-				node.left = delete(node.left, k);
-				return node;
-			} if (!isRed(node.left) && !isRed(node.left.left) && ()) { // 左节点是2-节点 
-				node.left.color = Color.RED; 
-				node.right.color = Color.RED;
-			} else if ()
-			node.left = delete(node.left,k);
-			return node;
-		} else if (cmp < 0) { // node.k < k
-			return node;
-		} else {	//hit the key 
-		}
-	}
-
-	// 删除从参数node开始的最小的node
-	private Node deleteMin(Node node) {
-		
 	}
 	
 	@Override
@@ -106,6 +81,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 
 	@Override
 	public void deleteMax() {
+		
 	}
 
 	
@@ -122,7 +98,8 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 
 	@Override
 	public int size() {
-		return root.size;
+		if (root == null) return 0;
+		else return root.size;
 	}
 
 	@Override
@@ -154,8 +131,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 	//get the smallest node in the given node
 	private Node min(Node node) {
 		if (node == null) return null;
-		
-		for (; node.left != null; node = node.left);
+		while(node.left != null) node = node.left;
 		return node;
 	}
 	
@@ -170,7 +146,7 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 	//get the most max node in the given node
 	private Node max(Node node) {
 		if (node == null) return null;
-		for (; node.right != null; node = node.right);
+		while(node.right != null) node = node.right;
 		return node;
 	}
 	
@@ -186,14 +162,11 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 			return null;
 		int cmp = node.k.compareTo(k);
 
-		if (cmp > 0)
-			return floor(node.left, k); // node.k 大于 k so we need to find the k
-										// in the left tree
-		else if (cmp < 0) { // node.k is less then k
-			K returnValue = node.k; // so node.k might be the value .but iam not
-									// sure we shall see
-			if (floor(node.right, k) != null) // 如果发现right 树中还有更接近k then we
-												// should return that value
+		if (cmp > 0) 
+			return floor(node.left, k); // node.k 大于 k so we need to find the k in the left tree
+		else if (cmp < 0) { 
+			K returnValue = node.k; // node.k is less then k so node.k might be the value .but iam not sure we shall see
+			if (floor(node.right, k) != null) // 如果发现right 树中还有更接近k then we should return that value
 				returnValue = floor(node.right, k);
 			return returnValue;
 		} else {
@@ -212,12 +185,10 @@ public class LeftLeaningRedBlackBST <K extends Comparable<K>, V> implements Map<
 		if (node == null)
 			return null;
 		int cmp = node.k.compareTo(k);
-
+		
 		if (cmp > 0) {
-			K returnValue = node.k; // so node.k might be the value .but iam not
-									// sure we shall see
-			if (ceiling(node.left, k) != null) // 如果发现right 树中还有更接近k then we
-												// should return that value
+			K returnValue = node.k; // so node.k might be the value .but iam not sure we shall see
+			if (ceiling(node.left, k) != null) // 如果发现left 树中还有更接近k then we should return that value
 				returnValue = ceiling(node.left, k);
 			return returnValue;
 		} else if (cmp < 0) { // node.k is less then k
