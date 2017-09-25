@@ -19,11 +19,11 @@ public class LeftLeaningRedBlack23Tree <K extends Comparable<K>, V> implements M
 	@Override
 	public void put(K k, V v) {
 		root = put(root, k, v);
-		root.color = Color.BLACK; // reset the root color to black
+		root.color = BLACK; // reset the root color to black
 	}
 
 	private Node put(Node node, K k, V v) {
-		if (node == null) return new Node(k, v, 1, Color.RED); //find the place of this new node
+		if (node == null) return new Node(k, v, 1, RED); //find the place of this new node
 		
 		int cmp = node.k.compareTo(k);
 		if 		(cmp > 0)  node.left = put(node.left, k, v); // node的k大一点 放到左边的tree中
@@ -69,22 +69,64 @@ public class LeftLeaningRedBlack23Tree <K extends Comparable<K>, V> implements M
 	public void delete(K k) {
 		
 	}
-
+	//delete arbitrary node
 	private Node delete(Node node, K k) {
+		
 	}
 	
 	@Override
 	public void deleteMin() {
-		
-	}
-
-	@Override
-	public void deleteMax() {
-		s
+		root = deleteMin(root);
+		if (root != null) root.color = BLACK;
 	}
 	
-	private Node deleteMax(Node node) {
+	//delete the min node
+	private Node deleteMin(Node node) {
+		if (node.left == null) return null;
+		if (!isRed(node.left) && !isRed(node.left.left))
+			makeNo2NodeInLeft(node);
+		node.left = deleteMin(node);
+		return fixup(node);
+	}
+	
+	//保证左节点不是二节点
+	// assert 保证了左边是一黑一红交替的node
+	private Node makeNo2NodeInLeft(Node currentNode) {
+		assert(!isRed(currentNode.left));
+		assert(!isRed(currentNode.left.left));
 		
+		flipColors(currentNode);
+		if (isRed(currentNode.right)) {
+			currentNode.right = rotateRight(currentNode.right);
+			currentNode = rotateLeft(currentNode);
+			flipColors(currentNode);
+		}
+		return currentNode;
+	}
+	
+	@Override
+	public void deleteMax() {
+		
+	}
+	
+	//delete the max node
+	private Node deleteMax(Node node) {
+		if (node == null) return null;
+		
+	}
+	
+	
+	private Node makeNo2NodeInRight(Node currentNode) {
+		assert(!isRed(currentNode.right));
+		assert(!isRed(currentNode.right.right));
+		
+		flipColors(currentNode);
+		if (isRed(currentNode.right)) {
+			currentNode.right = rotateRight(currentNode.right);
+			currentNode = rotateLeft(currentNode);
+			flipColors(currentNode);
+		}
+		return currentNode;
 	}
 	
 	
@@ -275,9 +317,9 @@ public class LeftLeaningRedBlack23Tree <K extends Comparable<K>, V> implements M
 		assert(isRed(h.right));
 		assert(isRed(h.left));
 		
-		h.color = Color.RED;
-		h.left.color = Color.BLACK;
-		h.right.color = Color.BLACK;
+		h.color = !h.color;
+		h.left.color = !h.left.color;
+		h.right.color = !h.right.color;
 	}
 	
 	
@@ -290,7 +332,7 @@ public class LeftLeaningRedBlack23Tree <K extends Comparable<K>, V> implements M
 		x.left = h;
 		
 		x.color = h.color; //change the colors
-		h.color = Color.RED;
+		h.color = RED;
 		
 		x.size = h.size; //change the sizes
 		h.size = size(h.left) + size(h.right) + 1;
@@ -306,7 +348,7 @@ public class LeftLeaningRedBlack23Tree <K extends Comparable<K>, V> implements M
 		x.right = h;
 		
 		x.color = h.color;
-		h.color = Color.RED;
+		h.color = RED;
 		
 		x.size = h.size;
 		h.size = size(h.left) + size(h.right) + 1;
@@ -316,15 +358,23 @@ public class LeftLeaningRedBlack23Tree <K extends Comparable<K>, V> implements M
 	
 	private boolean isRed(Node x) {
 		if (x == null) return false;
-		return x.color == Color.RED;
+		return x.color == RED;
 	}
 	
+	//修复方法
 	private Node fixup(Node node) {
+		
 		if (isRed(node.right) && !isRed(node.left)) node = rotateLeft(node);
 		if (isRed(node.left) && isRed(node.left.left)) node = rotateRight(node);
 		if (isRed(node.right) && isRed(node.left)) flipColors(node);
+		
+		node.size = size(node.left) + size(node.right) + 1;
+		
 		return node;
 	}
+	
+	private static final boolean RED = true;
+	private static final boolean BLACK = false;
 	
 	private class Node {
 		private K k;
@@ -332,19 +382,14 @@ public class LeftLeaningRedBlack23Tree <K extends Comparable<K>, V> implements M
 		private Node left;
 		private Node right;
 		private int size;
-		private Color color;
+		private boolean color;
 
-		Node(K k, V v, int size, Color color) {
+		Node(K k, V v, int size, boolean color) {
 			this.k = k;
 			this.v = v;
 			this.size = size;
 			this.color = color;
 		}
 		
-	}
-	
-	private enum Color {
-		BLACK,
-		RED
 	}
 }
