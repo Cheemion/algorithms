@@ -23,10 +23,9 @@ public class LeftLeaningRedBlack23Tree <K extends Comparable<K>, V> implements M
 	}
 
 	private Node put(Node node, K k, V v) {
-		if (node == null) //find the place of this new node
-			return new Node(k, v, 1, Color.RED);
-		int cmp = node.k.compareTo(k);
+		if (node == null) return new Node(k, v, 1, Color.RED); //find the place of this new node
 		
+		int cmp = node.k.compareTo(k);
 		if 		(cmp > 0)  node.left = put(node.left, k, v); // node的k大一点 放到左边的tree中
 		else if (cmp < 0)  node.right = put(node.right, k, v); // node的k小一点 放到右边的tree中
 		else			   node.v = v; //hit
@@ -53,12 +52,12 @@ public class LeftLeaningRedBlack23Tree <K extends Comparable<K>, V> implements M
 	}
 
 	private V get(Node node, K k) {
-
-		if (node == null)
-			return null; // not find
-		else if (node.k.compareTo(k) > 0) { // node的k大一点 放到左边的数中
+		if (node == null) return null; // not find
+		
+		int cmp = node.k.compareTo(k);
+		if (cmp > 0) { // node的k大一点 放到左边的数中
 			return get(node.left, k);
-		} else if (node.k.compareTo(k) < 0) { // node的k小一点 放到右边的数中
+		} else if (cmp < 0) { // node的k小一点 放到右边的数中
 			return get(node.right, k);
 		} else { // equal
 			return node.v;
@@ -81,9 +80,12 @@ public class LeftLeaningRedBlack23Tree <K extends Comparable<K>, V> implements M
 
 	@Override
 	public void deleteMax() {
+		s
+	}
+	
+	private Node deleteMax(Node node) {
 		
 	}
-
 	
 	
 	@Override
@@ -299,7 +301,7 @@ public class LeftLeaningRedBlack23Tree <K extends Comparable<K>, V> implements M
 	private Node rotateRight(Node  h) {
 		assert(isRed(h.left));
 		
-		Node  x = h.left;
+		Node x = h.left;
 		h.left = x.right;
 		x.right = h;
 		
@@ -317,6 +319,12 @@ public class LeftLeaningRedBlack23Tree <K extends Comparable<K>, V> implements M
 		return x.color == Color.RED;
 	}
 	
+	private Node fixup(Node node) {
+		if (isRed(node.right) && !isRed(node.left)) node = rotateLeft(node);
+		if (isRed(node.left) && isRed(node.left.left)) node = rotateRight(node);
+		if (isRed(node.right) && isRed(node.left)) flipColors(node);
+		return node;
+	}
 	
 	private class Node {
 		private K k;
