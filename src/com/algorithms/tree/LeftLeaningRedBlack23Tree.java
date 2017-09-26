@@ -32,7 +32,7 @@ public class LeftLeaningRedBlack23Tree <K extends Comparable<K>, V> implements M
 		
 		if (isRed(node.right) && !isRed(node.left)) node = rotateLeft(node);
 		if (isRed(node.left) && isRed(node.left.left)) node = rotateRight(node);
-		if (isRed(node.right) && isRed(node.left)) flipColors(node);
+		if (isRed(node.right) && isRed(node.left)) flipColors(node); //保证当前的node 不是4node
 		
 		node.size = size(node.left) + size(node.right) + 1;
 		
@@ -41,8 +41,7 @@ public class LeftLeaningRedBlack23Tree <K extends Comparable<K>, V> implements M
 
 	// 判断size的大小
 	private int size(Node node) {
-		if (node == null)
-			return 0;
+		if (node == null) return 0;
 		return node.size;
 	}
 

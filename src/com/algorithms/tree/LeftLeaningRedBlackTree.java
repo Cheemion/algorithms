@@ -49,6 +49,34 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 		
 	}
 	
+	public void deleteMin() {
+		root = deleteMin(root);
+		root.color = BLACK;
+	}
+	
+	
+	public Node deleteMin(Node cn) {
+		if (cn.left == null) return null;
+		
+		if (!isRed(cn.left) && !isRed(cn.left.left)) cn = moveRedLeft(cn);
+		
+		cn.left = deleteMin(cn.left);
+		
+		return fixup(cn);
+	}
+	
+	private Node moveRedLeft(Node cn) {
+		flipColors(cn);
+		if (isRed(cn.right.left)) {
+			cn.right = rotateRight(cn.right);
+			cn = rotateLeft(cn);
+			flipColors(cn);
+		}
+		return cn;
+	}
+	
+	
+	
 	public void deleteMax() {
 		root = deleteMax(root);
 		root.color = BLACK;
@@ -140,9 +168,13 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 	private Node fixup(Node h) {
 		if (isRed(h.right)) h = rotateLeft(h);
 		if (isRed(h.left) && isRed(h.left.left)) h = rotateRight(h);
-		if (isRed(h.left) && isRed(h.right)) flipColors(h); //这句话感觉没有必要加　不知道为什么要　split 4 nodes
+		// it said eliminate 4 nodes on the way up but its werid becaseu 4 nodes are legal in  2 3 4 trees
+		//if (isRed(h.left) && isRed(h.right)) flipColors(h); //这句话感觉没有必要加　不知道为什么要　split 4 nodes
+		
+		h.size = size(h.left) + size(h.right) + 1; //right the size
 		return h;
 	}
+	
 	
 	private boolean isRed(Node x) {
 		if (x == null) return false;
