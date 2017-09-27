@@ -6,6 +6,29 @@ package com.algorithms.tree;
  */
 public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements Map<K, V>*/{
 	
+	
+	public static void main(String[] args) {
+		
+		LeftLeaningRedBlackTree<Integer, Integer> tree = new LeftLeaningRedBlackTree<>();
+		tree.put(10, 10);
+		tree.put(7, 7);
+		tree.put(6, 6);
+		tree.put(8, 8);
+		tree.put(11, 11);
+		tree.put(15, 15);
+		tree.put(17, 17);
+		tree.put(0, 0);
+		tree.put(4, 4);
+		tree.put(19, 19);
+		System.out.println("tree.get(10) + " + tree.get(10));
+		System.out.println("tree.get(-1) + " + tree.get(-1));
+		System.out.println("tree.get(15) + " + tree.get(15));
+		
+		tree.delete(15);
+		System.out.println("hah");
+	}
+	
+	
 	private Node root = null;
 	
 	public void put(K k, V v) {
@@ -18,14 +41,15 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 		if(isRed(cn.left) && isRed(cn.right)) split4Node(cn);//是4节点的话 就split
 		
 		int cmp = k.compareTo(cn.k);
-		if (cmp > 0) cn.left = put(cn.left, k, v);
-		else if (cmp < 0) cn.right = put(cn.right, k, v);
+		if (cmp > 0) cn.right = put(cn.right, k, v); // k > node.k go right
+		else if (cmp < 0) cn.left = put(cn.left, k, v);
 		else cn.v = v; //hit
 		
-		
 		//following code is to fix the tree on the way up
-		if (isRed(cn.right)) cn = rotateLeft(cn);
+		if (isRed(cn.right) && !isRed(cn.left)) cn = rotateLeft(cn); //　right leaning 3nodes的时候 　 需要变成　left leaning
 		if (isRed(cn.left) && isRed(cn.left.left)) cn = rotateRight(cn);  //变成了一个4节点
+		
+		//if (isRed(cn.left) && isRed(cn.right)) flipColors(cn); 好像不split也可以 
 		
 		cn.size = size(cn.left) + size(cn.right) + 1;
 		return cn;
@@ -46,8 +70,54 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 	}
 	
 	public void delete(K k) {
-		
+		if (!isRed(root.left) && !isRed(root.right))
+			root.color = RED;
+		root = delete(root, k);
+		if (root != null)
+			root.color = BLACK;
 	}
+	
+	private Node delete(Node cn, K k) {
+		if (cn == null) return null;
+		int cmp = k.compareTo(cn.k);
+		
+		if (cmp < 0) { // k < node.k go left
+            if (!isRed(cn.left) && !isRed(cn.left.left))
+                cn = moveRedLeft(cn);
+            cn.left = delete(cn.left, k);
+		} else if (cmp > 0) { // k > node.k go right
+            if (isRed(cn.left))
+                cn = rotateRight(cn);
+            if (!isRed(cn.right) && !isRed(cn.right.left))
+                cn = moveRedRight(cn);
+            cn.right = delete(cn.right, k);
+		} else { //hit
+			
+            if (isRed(cn.left)) {
+                cn = rotateRight(cn);
+                cn.right = delete(cn.right, k);
+            }
+            
+            if (cn.left == null)
+            	return cn.right;
+            else if (cn.right == null)
+            	return cn.left;
+            else {
+                Node x = min(cn.right);
+                cn.k = x.k;
+                cn.v = x.v;
+                cn.right = deleteMin(cn.right);
+            }
+		}
+		return fixup(cn);
+	}
+	
+    private Node min(Node x) { 
+        // assert x != null;
+        if (x.left == null) return x; 
+        else return min(x.left); 
+    } 
+	
 	
 	public void deleteMin() {
 		root = deleteMin(root);
@@ -168,9 +238,8 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 	private Node fixup(Node h) {
 		if (isRed(h.right)) h = rotateLeft(h);
 		if (isRed(h.left) && isRed(h.left.left)) h = rotateRight(h);
-		// it said eliminate 4 nodes on the way up but its werid becaseu 4 nodes are legal in  2 3 4 trees
+		// on the way up eliminate 4 nodes
 		//if (isRed(h.left) && isRed(h.right)) flipColors(h); //这句话感觉没有必要加　不知道为什么要　split 4 nodes
-		
 		h.size = size(h.left) + size(h.right) + 1; //right the size
 		return h;
 	}
@@ -198,6 +267,13 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 			this.color = color;
 		}
 		
+		@Override
+		public String toString() {
+			if (color) return "red" + v;
+			else return "black" + v;
+		}
+		
 	}
 	
+
 }
