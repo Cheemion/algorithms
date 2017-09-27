@@ -9,7 +9,7 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 	
 	public static void main(String[] args) {
 		
-/*		LeftLeaningRedBlackTree<Integer, Integer> tree = new LeftLeaningRedBlackTree<>();
+		LeftLeaningRedBlackTree<Integer, Integer> tree = new LeftLeaningRedBlackTree<>();
 		tree.put(10, 10);
 		tree.put(7, 7);
 		tree.put(6, 6);
@@ -24,19 +24,10 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 		System.out.println("tree.get(-1) + " + tree.get(-1));
 		System.out.println("tree.get(15) + " + tree.get(15));
 		
-		tree.deleteMax();
-		tree.deleteMax();
-		*/
-		
-		LeftLeaningRedBlackTree<Integer, Integer> tree1 = new LeftLeaningRedBlackTree<>();
-		tree1.put(10, 10);
-		tree1.put(7, 7);
-		tree1.put(15, 15);
-		tree1.put(5, 5);
-		tree1.deleteMax();
+		tree.deleteMin();
+		tree.deleteMin();
 		System.out.println("hah");
 	}
-	
 	
 	private Node root = null;
 	
@@ -121,14 +112,17 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 		return fixup(cn);
 	}
 	
-    private Node min(Node x) { 
-        // assert x != null;
+    private Node min(Node x) {
         if (x.left == null) return x; 
         else return min(x.left); 
     } 
 	
 	
 	public void deleteMin() {
+		//保证了root节点不是2nodes
+		if (!isRed(root.left) && !isRed(root.right))
+			root.color = RED;
+		
 		root = deleteMin(root);
 		root.color = BLACK;
 	}
@@ -137,7 +131,8 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 	public Node deleteMin(Node cn) {
 		if (cn.left == null) return null;
 		
-		if (!isRed(cn.left) && !isRed(cn.left.left)) cn = moveRedLeft(cn);
+		if (!isRed(cn.left) && !isRed(cn.left.left)) 
+			cn = moveRedLeft(cn);
 		
 		cn.left = deleteMin(cn.left);
 		
