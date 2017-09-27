@@ -1,4 +1,7 @@
 package com.algorithms.tree;
+
+import com.algorithms.tree.RedBlackBST.Node;
+
 /**
  * 2-3-4tree  
  * @author altro
@@ -78,36 +81,38 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 	}
 	
 	private Node delete(Node cn, K k) {
+		
 		if (cn == null) return null;
+		
 		int cmp = k.compareTo(cn.k);
 		
 		if (cmp < 0) { // k < node.k go left
-            if (!isRed(cn.left) && !isRed(cn.left.left))
+            if (!isRed(cn.left) && !isRed(cn.left.left)) //保证了下一个左元素不是2nodes
                 cn = moveRedLeft(cn);
             cn.left = delete(cn.left, k);
 		} else if (cmp > 0) { // k > node.k go right
-            if (isRed(cn.left))
+            if (isRed(cn.left) && !isRed(cn.right)) //如果是3节点的话需要 rotate 把red转到右边
                 cn = rotateRight(cn);
-            if (!isRed(cn.right) && !isRed(cn.right.left))
+            if (!isRed(cn.right) && !isRed(cn.right.left)) //保证下一个右节点不是2nodes
                 cn = moveRedRight(cn);
             cn.right = delete(cn.right, k);
 		} else { //hit
 			
-            if (isRed(cn.left)) {
-                cn = rotateRight(cn);
-                cn.right = delete(cn.right, k);
-            }
+            if (isRed(cn.left) && !isRed(cn.right)) 
+            	cn = rotateRight(cn);
             
-            if (cn.left == null)
-            	return cn.right;
-            else if (cn.right == null)
-            	return cn.left;
-            else {
-                Node x = min(cn.right);
-                cn.k = x.k;
-                cn.v = x.v;
-                cn.right = deleteMin(cn.right);
-            }
+            if (k.compareTo(cn.k) == 0 && (cn.right == null)) //find null just return null
+                return null;
+            
+            if (!isRed(cn.right) && !isRed(cn.right.left)) //保证下一个右节点不是2nodes
+                cn = moveRedRight(cn);
+            
+            if (k.compareTo(cn.k) == 0) {
+            	 Node x = min(cn.right);
+                 cn.k = x.k;
+                 cn.v = x.v;
+                 cn.right = deleteMin(cn.right);
+            } else cn.right = delete(cn.right, k);
 		}
 		return fixup(cn);
 	}
