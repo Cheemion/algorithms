@@ -9,7 +9,7 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 	
 	public static void main(String[] args) {
 		
-		LeftLeaningRedBlackTree<Integer, Integer> tree = new LeftLeaningRedBlackTree<>();
+/*		LeftLeaningRedBlackTree<Integer, Integer> tree = new LeftLeaningRedBlackTree<>();
 		tree.put(10, 10);
 		tree.put(7, 7);
 		tree.put(6, 6);
@@ -24,7 +24,16 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 		System.out.println("tree.get(-1) + " + tree.get(-1));
 		System.out.println("tree.get(15) + " + tree.get(15));
 		
-		tree.delete(15);
+		tree.deleteMax();
+		tree.deleteMax();
+		*/
+		
+		LeftLeaningRedBlackTree<Integer, Integer> tree1 = new LeftLeaningRedBlackTree<>();
+		tree1.put(10, 10);
+		tree1.put(7, 7);
+		tree1.put(15, 15);
+		tree1.put(5, 5);
+		tree1.deleteMax();
 		System.out.println("hah");
 	}
 	
@@ -148,6 +157,10 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 	
 	
 	public void deleteMax() {
+		//保证了root节点不是2nodes
+		if (!isRed(root.left) && !isRed(root.right))
+			root.color = RED;
+		
 		root = deleteMax(root);
 		root.color = BLACK;
 	}
@@ -156,15 +169,18 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 	
 	//make sure currentNode is not a 2Node by make currentNode is red or currentNode.left is red
 	private Node deleteMax(Node cn) {
-		if (isRed(cn.left)) cn = rotateRight(cn); //一定要先rotateRight
+		//这一句话保证红色节点总在右边
+		if (isRed(cn.left) && !isRed(cn.right) /* && !isRed(cn.right) 这一句感觉要加因为 4node 并不需要rotateRight*/) 
+			cn = rotateRight(cn); //一定要先rotateRight
 		
 		if (cn.right == null) return null; // approach the end and find the currentNode's childNode is null then just return null;
 		
-		if (!isRed(cn.left) && !isRed(cn.left.right)) { //右节点是子节点　&&  右边子节点是2节点　
-			moveRedRight(cn); // 右边子节点  now it is not 2 node;
+		//保证了右边子节点不是 2-nodes 所以每次都保证右边子节点不是2node，所以最开始我们保证了root节点不是black, 因为这段代码对root节点无效
+		if (!isRed(cn.right) && !isRed(cn.right.left)) { //右节点是子节点　&&  右边子节点是2节点　
+			cn = moveRedRight(cn); // 右边子节点  now it is not 2 node;
 		}
 		
-		cn.left = deleteMax(cn.left);
+		cn.right = deleteMax(cn.right);
 		return fixup(cn); 
 	}
 	
