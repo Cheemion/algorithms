@@ -1,6 +1,5 @@
 package com.algorithms.tree;
 
-import com.algorithms.tree.RedBlackBST.Node;
 
 /**
  * 2-3-4tree  
@@ -8,7 +7,6 @@ import com.algorithms.tree.RedBlackBST.Node;
  *
  */
 public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements Map<K, V>*/{
-	
 	
 	public static void main(String[] args) {
 		
@@ -27,8 +25,8 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 		System.out.println("tree.get(-1) + " + tree.get(-1));
 		System.out.println("tree.get(15) + " + tree.get(15));
 		
-		tree.deleteMin();
-		tree.deleteMin();
+		tree.delete(15);
+		tree.delete(17);
 		System.out.println("hah");
 	}
 	
@@ -73,6 +71,9 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 	}
 	
 	public void delete(K k) {
+        if (k == null) throw new IllegalArgumentException("argument to delete() is null");
+        if (!contains(k)) return;
+		
 		if (!isRed(root.left) && !isRed(root.right))
 			root.color = RED;
 		root = delete(root, k);
@@ -80,6 +81,10 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 			root.color = BLACK;
 	}
 	
+	public boolean contains(K k) {
+		return get(k) != null;
+	}
+
 	private Node delete(Node cn, K k) {
 		
 		if (cn == null) return null;
