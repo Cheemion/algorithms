@@ -2,6 +2,7 @@ package com.algorithms.elementary;
 
 import java.util.AbstractMap;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -13,6 +14,13 @@ import java.util.Set;
  * @param <V>
  */
 public class HashST<K, V> extends AbstractMap<K,V> implements Map<K, V>{
+	
+	public static void main(String[] args) {
+		HashST<String, Integer> map = new HashST<>();
+		map.put("1", 1);
+		map.put("2", 2);
+	}
+	
 	
 	private static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16
 	private static final float DEFAULT_LOAD_FACTOR = 0.75f;
@@ -132,15 +140,56 @@ public class HashST<K, V> extends AbstractMap<K,V> implements Map<K, V>{
     public V remove(Object key) {
     	int position = hash(key) % capacity;
     	if (base[position] == null) return null;
-    	for (Node<K, V> node = base[position]; node.next != null; node = node.next) {
-    		if (node.key.equals(key))
-    			node
+    	if (base[position].key.equals(key)) {
+    		V v = base[position].value;
+    		base[position] = base[position].next; 
+    		return v;
+    	} else {
+        	for (Node<K, V> node = base[position]; node.next != null; node = node.next) {
+        		if (node.next.key.equals(key)) {
+        			V v = node.next.value;
+        			node.next = node.next.next;
+        			return v;
+        		}
+        	}
     	}
-    	return super.remove(key);
+    	return null;
     }
     
 	@Override
-	public Set<java.util.Map.Entry<K, V>> entrySet() {
-		return null;
+	public Set<Map.Entry<K, V>> entrySet() {
+		Set<Map.Entry<K, V>> set = new HashSet<>();
+		for (int i = 0; i < base.length; i++) {
+			if (base[i] == null) continue;
+			Node<K, V> node = base[i];
+			while (node != null) {
+				set.add(new Entry(node.key, node.value));
+				node = node.next;
+			}
+		}
+		return set;
+	}
+	private class Entry<K, V> implements Map.Entry<K, V> {
+		private K k;
+		private V v;
+		Entry(K k, V v) {
+			this.k = k;
+			this.v = v;
+		}
+		@Override
+		public K getKey() {
+			return k;
+		}
+
+		@Override
+		public V getValue() {
+			return v;
+		}
+
+		@Override
+		public V setValue(V value) {
+			throw new RuntimeException("not supported");
+		}
+		
 	}
 }
