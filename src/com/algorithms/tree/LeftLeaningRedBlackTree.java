@@ -309,7 +309,7 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V> implements Map
 	public Node deleteMin(Node cn) {
 		if (cn.left == null) return null;
 		
-		if (!isRed(cn.left) && !isRed(cn.left.left)) 
+		if (!isRed(cn.left) && !isRed(cn.left.left))  //判断左边子节点是不是2node，是的话就需要把Red带下去
 			cn = moveRedLeft(cn);
 		
 		cn.left = deleteMin(cn.left);
@@ -425,7 +425,8 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V> implements Map
 	
 	
 	private Node fixup(Node h) {
-		if (isRed(h.right)) h = rotateLeft(h);
+		
+		if (isRed(h.right) && !isRed(h.left)) h = rotateLeft(h); //右倾
 		if (isRed(h.left) && isRed(h.left.left)) h = rotateRight(h);
 		// on the way up eliminate 4 nodes
 		//if (isRed(h.left) && isRed(h.right)) flipColors(h); //这句话感觉没有必要加　不知道为什么要　split 4 nodes
