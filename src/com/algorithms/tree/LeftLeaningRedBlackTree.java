@@ -1,12 +1,16 @@
 package com.algorithms.tree;
 
+import java.util.NoSuchElementException;
+
+import com.algorithms.elementary.ArrayQueue;
+import com.algorithms.elementary.Queue;
 
 /**
  * 2-3-4tree  
  * @author altro
  *
  */
-public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements Map<K, V>*/{
+public class LeftLeaningRedBlackTree <K extends Comparable<K>, V> implements Map<K, V>{
 	
 	public static void main(String[] args) {
 		
@@ -68,6 +72,170 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 		if(cmp > 0) return get(cn.right, k);
 		else if (cmp < 0) return get(cn.left, k);
 		else return cn.v; // hit
+	}
+	
+	@Override
+	public boolean isEmpty() {
+		return root == null;
+	}
+
+	@Override
+	public int size() {
+		return size(root);
+	}
+
+	@Override
+	public int size(K lo, K hi) {
+		return size(root, lo, hi);
+	}
+	
+	private int size(Node node, K lo, K hi) {
+		if (node == null) return 0;
+		int cmpToLow = node.k.compareTo(lo);
+		int cmpToHi = node.k.compareTo(hi);
+		if (cmpToLow < 0) { //node is less than lo
+			return size(node.right, lo, hi);
+		} else if (cmpToHi > 0) { // node is large than hi
+			return size(node.left, lo, hi);
+		} else { // node is between lo and hi, [lo, hi]
+			return size(node.right, lo, hi) + size(node.left, lo, hi) + 1;
+		}
+	}
+	
+
+	@Override
+	public K min() {
+		if (isEmpty()) return null;
+		else return min(root).k;
+	}
+
+	@Override
+	public K max() {
+		if (isEmpty()) return null;
+		else return max(root).k;
+	}
+
+	//get the most max node in the given node
+	private Node max(Node node) {
+		while(node.right != null) node = node.right;
+		return node;
+	}
+	
+	
+	@Override
+	public K floor(K k) {
+        if (k == null) throw new IllegalArgumentException("argument to floor() is null");
+		return floor(root, k);
+	}
+	
+	private K floor(Node node, K k) {
+		
+		if (node == null) return null;
+		int cmp = node.k.compareTo(k); 
+		
+		if (cmp > 0) return floor(node.left, k); //node.k 大于 k so we need to find the k in the left tree
+		else if (cmp < 0) {   //node.k is less then k
+			K returnValue = node.k;	 //so node.k might be the value .but iam not sure we shall see
+			if (floor(node.right, k) != null)  //如果发现right 树中还有更接近k then we should return that value
+				returnValue = floor(node.right, k);
+		   return returnValue;
+		} else {
+			return node.k;
+		}
+	}
+
+	@Override
+	public K ceiling(K k) {
+        if (k == null) throw new IllegalArgumentException("argument to ceilling() is null");
+        else return ceiling(root, k);
+	}
+
+	private K ceiling(Node node, K k) {
+		
+		if (node == null) return null;
+		int cmp = node.k.compareTo(k); 
+		
+		if (cmp > 0) {
+			K returnValue = node.k;	 //so node.k might be the value .but iam not sure we shall see
+			if (ceiling(node.left, k) != null)  //如果发现right 树中还有更接近k then we should return that value
+				returnValue = ceiling(node.left, k);
+		   return returnValue;
+		}
+		else if (cmp < 0) {   //node.k is less then k
+			return ceiling(node.right, k);
+		} else {
+			return node.k;
+		}
+		
+	}
+	
+	@Override
+	public int rank(K k) {
+        if (k == null) throw new IllegalArgumentException("argument to rank() is null");
+		return rank(root, k);
+	}
+
+	
+	private int rank(Node node, K k) {
+		if (node == null) return 0;
+		int cmp = node.k.compareTo(k);
+		if (cmp > 0) 
+			return rank(node.left, k);
+		else if (cmp < 0) {
+			return size(node.left) + rank(node.right, k) + 1;
+		} else 
+			return size(node.left);
+	}
+	
+	@Override
+	public K select(int k) {
+		if (root == null) throw new NoSuchElementException();
+		if (k > root.size - 1 || k < 0) throw new NoSuchElementException();
+		return select(root, k);
+	}
+
+	
+	private K select(Node node, int k) {
+		
+		if (size(node.left) > k) {
+			return select(node.left, k);
+		} else if (size(node.left) < k) {
+			return select(node.right, k - size(node.left) - 1);
+		} else 
+			return node.k;
+		
+	}
+	
+	// keys in [lo , hi] in sorted order
+	@Override
+	public Iterable<K> keys(K lo, K hi) {
+		Queue<K> queue = new ArrayQueue<>();
+		keys(root, lo, hi, queue);
+		return queue;
+	}
+	
+	//最小的先加入queue
+	private void keys(Node node, K lo, K hi, Queue<K> queue) {
+		if (node == null) return;
+		int cmpToLow = node.k.compareTo(lo);
+		int cmpToHi = node.k.compareTo(hi);
+		
+		if (cmpToLow < 0) { //超出了lo的范围
+			keys(node.left, lo, hi, queue);
+		} else if (cmpToHi > 0) { //超出了hi的范围
+			keys(node.right, lo, hi, queue);
+		} else { //在2个范围内
+			keys(node.left, lo, hi, queue);
+			queue.enqueue(node.k);
+			keys(node.right, lo, hi, queue);
+		}
+	}
+
+	@Override
+	public Iterable<K> keys() {
+		Queue<K> queue = new ArrayQueue<>();
+		keys(root, min(), max(), queue);
+		return queue;
 	}
 	
 	public void delete(K k) {
@@ -290,11 +458,9 @@ public class LeftLeaningRedBlackTree <K extends Comparable<K>, V>/* implements M
 		
 		@Override
 		public String toString() {
-			if (color) return "red" + v;
-			else return "black" + v;
+			if (color) return "red " + v;
+			else return "black " + v;
 		}
 		
 	}
-	
-
 }
