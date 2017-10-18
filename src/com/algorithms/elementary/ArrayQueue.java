@@ -21,7 +21,7 @@ public class ArrayQueue<T> implements Queue<T>{
 			System.out.println(s);
 	}
 
-	private static int DEFAULT_CAPACITY = 3;
+	private static int DEFAULT_CAPACITY = 10;
 	private int head = 0;
 	private int tail = 0;
 	private int capacity;

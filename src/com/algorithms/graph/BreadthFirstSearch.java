@@ -1,12 +1,14 @@
 package com.algorithms.graph;
 
+import com.algorithms.elementary.ArrayQueue;
 import com.algorithms.elementary.ArrayStack;
+import com.algorithms.elementary.Queue;
 import com.algorithms.elementary.Stack;
 
-public class DepthFirstSearch implements Paths{
+public class BreadthFirstSearch implements Paths {
 	private boolean[] marked;
 	private int[] edgeTo;
-	private int s; // source 起点
+	private int s; //source 起点
 	
 	
 	public static void main(String[] args) {
@@ -15,24 +17,30 @@ public class DepthFirstSearch implements Paths{
 		g.addEdge(1, 0);
 		DepthFirstSearch dgs = new DepthFirstSearch(g, 0);
 		System.out.println(dgs.hasPathTo(0));
-		System.out.println(dgs.pathTo(0));
+		System.out.println(dgs.pathTo(1));
 	}
 	
-	public DepthFirstSearch(Graph g, int s) {
+	public BreadthFirstSearch(Graph g, int s) {
 		this.s = s;
 		marked = new boolean[g.vertices()];
 		edgeTo = new int[g.vertices()];
-		dfs(g, s);
+		bfs(g, s);
 	}
 	
 	
 	//s起点开始向其他点扩散
-	private void dfs(Graph g, int s) {
+	private void bfs(Graph g, int s) {
+		Queue<Integer> queue = new ArrayQueue<>();
+		queue.enqueue(s);
 		marked[s] = true;
-		for (int w : g.adj(s)) {
-			if (!marked[w]) {
-				edgeTo[w] = s;
-				dfs(g, w);
+		while(!queue.isEmpty()) {
+			Integer vertex = queue.dequeue();
+			for (int w : g.adj(vertex)) {
+				if (!marked[w]) {
+					marked[w] = true;
+					edgeTo[w] = vertex;
+					queue.enqueue(w);
+				}
 			}
 		}
 	}
@@ -51,5 +59,4 @@ public class DepthFirstSearch implements Paths{
 		stack.push(s);
 		return stack;
 	}
-	
 }
