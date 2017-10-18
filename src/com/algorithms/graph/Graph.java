@@ -10,25 +10,36 @@ public class Graph {
 	private Bag<Integer>[] adj;
 	
 	
+	public static void main(String[] args) {
+		Graph g = new Graph(3);
+		g.addEdge(0, 0);
+		g.addEdge(1, 1);
+		System.out.println(g.vertices());
+		System.out.println(g.numberOfSelfLoops(g));
+	}
+	
 	public Graph(int size) {
 		this.size = size;
 		adj = new ArrayBag[size];
 		for (int i = 0; i < adj.length; i++) 
 			adj[i] = new ArrayBag<>();
-		
 	}
 	
+	//同一个点会加两遍，比如(1, 1)
 	public void addEdge(int v, int w) {
 		adj[v].add(w);
 		adj[w].add(v);
 		edgeNum++;
 	}
+	
 	public Iterable<Integer> adj(int v) { //vertices adjacent to v
 		return adj[v];
 	}
+	
 	public int vertices() { //number of vertices(vertex)
 		return size;
 	}
+	
 	public int edges() { // number of edges
 		return edgeNum;
 	}

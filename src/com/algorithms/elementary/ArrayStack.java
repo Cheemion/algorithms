@@ -84,4 +84,14 @@ public class ArrayStack<T> implements Stack<T>{
 			base[i] = oldBase[i];
 	}
 	
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		for(T t : this) {
+			sb.append(t);
+			sb.append(' ');
+		}
+		return sb.toString();
+	}
+	
 }
