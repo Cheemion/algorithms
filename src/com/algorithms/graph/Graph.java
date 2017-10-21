@@ -9,7 +9,6 @@ public class Graph {
 	private int edgeNum;
 	private Bag<Integer>[] adj;
 	
-	
 	public static void main(String[] args) {
 		Graph g = new Graph(3);
 		g.addEdge(0, 0);
@@ -49,6 +48,7 @@ public class Graph {
 		for (int w : g.adj(v)) degree++;
 		return degree;
 	}
+	
 	public static int maxDegree(Graph g) {
 		int max = 0;
 		for (int v = 0; v < g.vertices(); v++) {
@@ -57,9 +57,11 @@ public class Graph {
 		}
 		return max;
 	}
+	
 	public static double averageDegree(Graph g) {
 		return 2.0 * g.edges() / g.vertices();
 	}
+	
 	public static int numberOfSelfLoops(Graph g) {
 		int count = 0;
 		for (int v = 0; v < g.vertices(); v++) 
