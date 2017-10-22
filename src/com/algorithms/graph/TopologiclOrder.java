@@ -11,30 +11,28 @@ import com.algorithms.elementary.Stack;
 public class TopologiclOrder {
 	private boolean[] marked;
 	//第一个完成的元素先加入其中
+	//从左到右是 topoligic的顺序, 最左边是需要最先完成的
 	private Stack<Integer> order;
 	private boolean isCycle;
 	
 	public static void main(String[] args) {
 		Digraph g = new Digraph(4);
-		g.addEdge(0, 1);
+		g.addEdge(0, 1);// 0 完成后才可以去1
 		g.addEdge(1, 2);
-		g.addEdge(2, 3);
+		g.addEdge(2, 0);
 		System.out.println("1");
 		TopologiclOrder to = new TopologiclOrder(g);
 		System.out.println(to.isCycle());
 		System.out.println("1");
-		
 		System.out.println(to.topologiclOrder());
 	}
 	
 	public TopologiclOrder(Digraph g) {
 		cycleDetect(g);
-		if (!isCycle) {
-			marked = new boolean[g.vertices()];
-			order = new ArrayStack<>();
-			for (int v = 0; v < g.vertices(); v++) 
-				if (!marked[v]) dfs(g, v);
-		}
+		marked = new boolean[g.vertices()];
+		order = new ArrayStack<>();
+		for (int v = 0; v < g.vertices(); v++) 
+			if (!marked[v]) dfs(g, v);
 	}
 	
 	private void cycleDetect(Digraph g) {
@@ -73,7 +71,6 @@ public class TopologiclOrder {
 	}
 	
 	public Iterable<Integer> topologiclOrder() {
-		if (isCycle) return null;
 		return order;
 	}
 }
