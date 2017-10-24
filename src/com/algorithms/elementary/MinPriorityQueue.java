@@ -4,7 +4,7 @@ import static com.algorithms.sort.Sorts.*;
 import java.util.NoSuchElementException;
 public class MinPriorityQueue<T extends Comparable<T>> {
 	
-	private static int DEFAULT_CAPACITY = 4;
+	private static int DEFAULT_CAPACITY = 10;
 	private int size = 0;
 	//第一个元素拿来记录这个queue的size
 	private T[] base;
@@ -46,7 +46,7 @@ public class MinPriorityQueue<T extends Comparable<T>> {
 	
 	// index 从 1开始
 	// max 最大的值往上走
-	private static void swim(Comparable[] a, int target) {
+	private void swim(Comparable[] a, int target) {
 		while (target > 1 && less(a[target], a[target / 2])) {
 			exch(a, target, target / 2);
 			target = target / 2;
@@ -54,7 +54,7 @@ public class MinPriorityQueue<T extends Comparable<T>> {
 	}
 	//max 
 	//n means the last element 's index in the a
-	private static void sink(Comparable[] a, int target, int n) {
+	private void sink(Comparable[] a, int target, int n) {
 		while(target * 2 <= n) {  //target * 2 means node的子左节点的是有值的
 			int childNode = target * 2;
 			if (childNode + 1 <= n) //右结点有值的话

@@ -5,7 +5,13 @@ package com.algorithms.graph;
  *
  */
 public interface MST {
+	
 	Iterable<Edge> edges(); 
 	
-	double weight();
+	default double weight() {
+		double allWeight = 0;
+		for (Edge edge : edges())
+			allWeight += edge.weight();
+		return allWeight;
+	}
 }

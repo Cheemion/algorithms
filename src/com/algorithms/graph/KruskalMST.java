@@ -30,12 +30,4 @@ public class KruskalMST implements MST{
 	public Iterable<Edge> edges() {
 		return mst;
 	}
-
-	@Override
-	public double weight() {
-		int allWeight = 0;
-		for (Edge edge : edges())
-			allWeight += edge.weight();
-		return allWeight;
-	}
 }
