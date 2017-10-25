@@ -49,6 +49,10 @@ public class IndexMinPriorityQueue<T extends Comparable<T>> {
 		this.capacity = capacity;
 	}
 	
+	public T peek(int k) {
+		return values[k];
+	}
+	
 	public void insert(int k, T t) {
 		if (k < 0 || k >= capacity) throw new RuntimeException("k: " + k +"beyond the capacity");
 		values[k] = t;

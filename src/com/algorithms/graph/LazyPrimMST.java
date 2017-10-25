@@ -3,7 +3,7 @@ package com.algorithms.graph;
 import com.algorithms.elementary.ArrayQueue;
 import com.algorithms.elementary.MinPriorityQueue;
 import com.algorithms.elementary.Queue;
-
+// 不能有多个分量 比如sets of isolated edges
 public class LazyPrimMST implements MST{
 	
 	private boolean[] marked;
