@@ -1,27 +1,24 @@
 package com.algorithms.graph;
 
 import com.algorithms.elementary.ArrayStack;
-import com.algorithms.elementary.IndexMinPriorityQueue;
 import com.algorithms.elementary.Stack;
 
 /**
- * find the shortest path in digraph
- * can be cyclic
+ * can not have negative cyclic
+ * should see @BellmanFordQueueBasedShortestPath this is more efficient
  * @author altro
  *
  */
-public class DijkstraShortestPath {
+public class BellmanFordShortestPath {
 	private double[] distTo;
 	private DirectedEdge[] edgeTo;
 	private int source;
-	private IndexMinPriorityQueue<Double> mpq;
 	
 	public static void main(String[] args) {
-		System.out.println(Double.POSITIVE_INFINITY + 1.0);
 	}
 	
 	
-	public DijkstraShortestPath(EdgeWeightedDigraph g, int s) {
+	public BellmanFordShortestPath(EdgeWeightedDigraph g, int s) {
 		
 		this.source = s;
 		distTo = new double[g.vertices()];
@@ -30,17 +27,12 @@ public class DijkstraShortestPath {
 			distTo[i] = Double.POSITIVE_INFINITY;
 		distTo[s] = 0.0;
 		
-		mpq.insert(s, 0.0);
-		start(g);
+		for (int pass = 0; pass < g.vertices(); pass++) 
+			for (int v = 0; v < g.vertices(); v++) 
+				for (DirectedEdge e : g.adj(v))
+					relax(e);
 	}
 	
-	private void start(EdgeWeightedDigraph g) {
-		while (!mpq.isEmpty()) {
-			int v = mpq.delMin();
-			for (DirectedEdge e : g.adj(v))
-				relax(e);
-		}
-	}
 
 	public boolean hasPathTo(int v) {
 		return distTo[v] != Double.POSITIVE_INFINITY;
@@ -62,8 +54,6 @@ public class DijkstraShortestPath {
 		if (distTo[w] > distTo[v] + e.weight()) {
 			distTo[w] = distTo[v] + e.weight();
 			edgeTo[w] = e;
-			if (mpq.contains(w)) mpq.decreaseKey(w, distTo[w]);
-			else mpq.insert(w, distTo[w]);
 		}
 	}
 }
