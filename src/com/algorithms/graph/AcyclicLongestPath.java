@@ -1,26 +1,39 @@
 package com.algorithms.graph;
 
 import com.algorithms.elementary.ArrayStack;
+import com.algorithms.elementary.IndexMinPriorityQueue;
 import com.algorithms.elementary.Stack;
 
 /**
- * find the shortest path in digraph
  * @author altro
  *
  */
-public class ShortestPath {
+public class AcyclicLongestPath {
 	private double[] distTo;
 	private DirectedEdge[] edgeTo;
-	private int source;
+	private int source;	
 	
-	public ShortestPath(EdgeWeightedDigraph g, int s) {
+	public AcyclicLongestPath(EdgeWeightedDigraph g1, int s) {
+		EdgeWeightedDigraph g = g1.transformToNegative();
+		
 		this.source = s;
 		distTo = new double[g.vertices()];
 		edgeTo = new DirectedEdge[g.vertices()];
+		for (int i = 0; i < distTo.length; i++) 
+			distTo[i] = Double.POSITIVE_INFINITY;
+		distTo[s] = 0.0;
+		
+		EdgeWeightedTopologiclOrder ewto = new EdgeWeightedTopologiclOrder(g);
+		if (ewto.isCycle()) throw new RuntimeException("EdgeWeightedDigraph is a cyclic");
+		
+		for (int v : ewto.topologiclOrder()) 
+			for (DirectedEdge e : g.adj(v)) 
+				relax(e);
 	}
 	
+
 	public boolean hasPathTo(int v) {
-		return false;
+		return distTo[v] != Double.POSITIVE_INFINITY;
 	}
 	
 	public double distTo(int v) {

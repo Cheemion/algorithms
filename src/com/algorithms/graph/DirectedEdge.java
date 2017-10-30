@@ -1,6 +1,6 @@
 package com.algorithms.graph;
 
-public class DirectedEdge{
+public class DirectedEdge implements Comparable<DirectedEdge>{
 	private int v;
 	private int w;
 	private double weight;
@@ -19,5 +19,11 @@ public class DirectedEdge{
 	public String toString() {
 		return "DirectedEdge [v=" + v + ", w=" + w + ", weight=" + weight + "]";
 	}
-	
+
+	@Override
+	public int compareTo(DirectedEdge that) {
+		if (this.weight < that.weight) return -1;
+		else if (this.weight > that.weight) return 1;
+		else return 0;
+	}
 }

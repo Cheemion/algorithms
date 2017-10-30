@@ -47,4 +47,12 @@ public class EdgeWeightedDigraph {
 	public String toString() {
 		return "EdgeWeightedDigraph [size=" + size + ", edgeNum=" + edgeNum + ", adj=" + Arrays.toString(adj) + "]";
 	}
+	
+	public EdgeWeightedDigraph transformToNegative() {
+		EdgeWeightedDigraph ewd = new EdgeWeightedDigraph(size);
+		for (DirectedEdge e : edges()) {
+			ewd.addEdge(new DirectedEdge(e.from(), e.to(), -e.weight()));
+		}
+		return ewd;
+	}
 }
