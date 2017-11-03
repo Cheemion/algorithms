@@ -27,6 +27,8 @@ public class BellmanFordShortestPath {
 			distTo[i] = Double.POSITIVE_INFINITY;
 		distTo[s] = 0.0;
 		
+		//in fact here we just need have vertices() - 1 times of iterations
+		//but we just leave it at that
 		for (int pass = 0; pass < g.vertices(); pass++) 
 			for (int v = 0; v < g.vertices(); v++) 
 				for (DirectedEdge e : g.adj(v))

@@ -1,7 +1,9 @@
 package com.algorithms.graph;
 
+import com.algorithms.elementary.ArrayBag;
 import com.algorithms.elementary.ArrayQueue;
 import com.algorithms.elementary.ArrayStack;
+import com.algorithms.elementary.Bag;
 import com.algorithms.elementary.Queue;
 import com.algorithms.elementary.Stack;
 
@@ -15,9 +17,31 @@ public class BellmanFordQueueBasedShortestPath {
 	private DirectedEdge[] edgeTo;
 	private int source;
 	private Queue<Integer> changed;
+	private boolean hasNegativeCycle;
+	private Bag<DirectedEdge> negativeCycleEdges;
 	
 	public static void main(String[] args) {
-		
+		EdgeWeightedDigraph graph = new EdgeWeightedDigraph(8);
+		graph.addEdge(new DirectedEdge(4, 5, 0.35));
+		graph.addEdge(new DirectedEdge(5, 4, 0.35));
+		graph.addEdge(new DirectedEdge(4, 7, 0.37));
+		graph.addEdge(new DirectedEdge(5, 7, 0.28));
+		graph.addEdge(new DirectedEdge(7, 5, 0.28));
+		graph.addEdge(new DirectedEdge(5, 1, 0.32));
+		graph.addEdge(new DirectedEdge(0, 4, 0.38));
+		graph.addEdge(new DirectedEdge(0, 2, 0.26));
+		graph.addEdge(new DirectedEdge(7, 3, 0.39));
+		graph.addEdge(new DirectedEdge(1, 3, 0.29));
+		graph.addEdge(new DirectedEdge(2, 7, 0.34));
+		graph.addEdge(new DirectedEdge(6, 2, -1.20));
+		graph.addEdge(new DirectedEdge(3, 6, 0.52));
+		graph.addEdge(new DirectedEdge(6, 0, -1.40));
+		graph.addEdge(new DirectedEdge(6, 4, -1.25));
+		BellmanFordQueueBasedShortestPath b = new BellmanFordQueueBasedShortestPath(graph, 0);
+		System.out.println("start");
+		System.out.println(b.hasNegativeCycle());
+		System.out.println(b.negativeCycle());
+		System.out.println("end");
 	}
 	
 	
@@ -31,14 +55,30 @@ public class BellmanFordQueueBasedShortestPath {
 			distTo[i] = Double.POSITIVE_INFINITY;
 		distTo[s] = 0.0;
 		changed.enqueue(s);
-		
 		start(g);
 	}
 	
 
 	private void start(EdgeWeightedDigraph g) {
-		while (!changed.isEmpty()) {
-			
+		int pass = 0;
+		for (pass = 0; pass < g.vertices() && !changed.isEmpty(); ) {
+			System.out.println("pass:" + pass);
+			System.out.println(g.vertices());
+			System.out.println(changed.isEmpty());
+			Queue<Integer> temp = new ArrayQueue<>();
+			for (Integer changedPosition : changed) {
+				for (DirectedEdge e : g.adj(changedPosition))
+					relax(e, temp);
+			}
+			changed = temp;
+			pass = pass + 1;
+		}
+		if (pass > g.vertices()) {
+			hasNegativeCycle = true;
+			negativeCycleEdges = new ArrayBag<>();
+			int changePos = changed.dequeue();
+			for (int i = changePos; i != changePos; i = edgeTo[i].from())
+				negativeCycleEdges.add(edgeTo[i]);
 		}
 	}
 
@@ -58,11 +98,21 @@ public class BellmanFordQueueBasedShortestPath {
 		return path;
 	}
 	
-	private void relax(DirectedEdge e) {
+	private void relax(DirectedEdge e, Queue<Integer> queue) {
 		int v = e.from(), w = e.to();
 		if (distTo[w] > distTo[v] + e.weight()) {
 			distTo[w] = distTo[v] + e.weight();
 			edgeTo[w] = e;
+			queue.enqueue(w);
 		}
 	}
+	
+	public boolean hasNegativeCycle() {
+		return hasNegativeCycle;
+	}
+	
+	public Iterable<DirectedEdge> negativeCycle() {
+		return negativeCycleEdges;
+	}
 }
+
