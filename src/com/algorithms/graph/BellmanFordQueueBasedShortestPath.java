@@ -61,7 +61,7 @@ public class BellmanFordQueueBasedShortestPath {
 
 	private void start(EdgeWeightedDigraph g) {
 		int pass = 0;
-		for (pass = 0; pass < g.vertices() && !changed.isEmpty(); ) {
+		for (pass = 0; pass < g.vertices() && !changed.isEmpty(); pass = pass + 1) {
 			System.out.println("pass:" + pass);
 			System.out.println(g.vertices());
 			System.out.println(changed.isEmpty());
@@ -71,7 +71,6 @@ public class BellmanFordQueueBasedShortestPath {
 					relax(e, temp);
 			}
 			changed = temp;
-			pass = pass + 1;
 		}
 		if (pass > g.vertices()) {
 			hasNegativeCycle = true;
