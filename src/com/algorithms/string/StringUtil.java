@@ -19,8 +19,4 @@ public class StringUtil {
 		return n;
 	}
 	
-	private static int charAt(String s, int d) {
-		if (d < s.length()) return s.charAt(d);
-		else return -1;
-	}
 }

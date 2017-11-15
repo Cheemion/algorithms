@@ -28,7 +28,7 @@ public class InsertionSort {
 			}
 		}
 	}
-	
+	// low and hi is inclusive
 	public static void sort(Comparable[] a, int low, int hi) {
 		for (int i = low; i <= hi ; i++) {
 			for (int j = i ; j > low; j--) {
