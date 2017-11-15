@@ -78,4 +78,12 @@ public class ArrayBag<T> implements Bag<T>{
 	public int size() {
 		return index;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for(T t : this)
+			sb.append(t + " ");
+		return sb.toString();
+	}
 }

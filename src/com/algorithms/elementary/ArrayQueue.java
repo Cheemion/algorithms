@@ -102,4 +102,12 @@ public class ArrayQueue<T> implements Queue<T>{
 		for (int i = 0; i < oldBase.length; i++) 
 			base[i] = oldBase[i];
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for(T t : this)
+			sb.append(t + " ");
+		return sb.toString();
+	}
 }
