@@ -3,9 +3,11 @@ package com.algorithms.string;
 import java.util.Arrays;
 
 /**
+ * string sort algorithms
  * 从字符串的尾部开始排序
  * @author altro
  * least significant digit radix sorts, least significant 代表的是 字符串的最后一位
+ * 时间复杂度是  wn , w的意思是字符串的长度
  */
 public class LSD {
 	

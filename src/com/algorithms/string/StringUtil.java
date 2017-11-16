@@ -6,10 +6,16 @@ public class StringUtil {
 	
 	
 	public static void main(String[] args) {
+		
 		System.out.println(lrs("asa1sasa1zxcvasdfwefasfv234234rasdfq234rfasdgqwerf23rfasz34rq=asdgfasgdfhasdkjfhkajsdhjkfhasdfhjkasdhfjkashdjkfasdfasdfasdfasdfasdfasdf"));
+		System.out.println(Arrays.toString(suffixes("123")));
+		
+		System.out.println("".length());
+		
 	}
 	
-	public static String[] suffixes(String s) {
+	
+	public static String[] suffixes(String s) { 
 		int n = s.length();
 		String[] suffixes = new String[n];
 		for (int i = 0; i < n; i++) 
@@ -25,6 +31,7 @@ public class StringUtil {
 				return i;
 		return n;
 	}
+	
 	// longeset repeated substring
 	public static String lrs(String s) {
 		int n = s.length();

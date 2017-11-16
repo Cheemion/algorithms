@@ -2,7 +2,13 @@ package com.algorithms.string;
 
 import java.util.Arrays;
 
-//根据Index接口来排序对象
+
+/**
+ * 根据Index接口来排序对象
+ * 非常非常快 只需要 linear time
+ * @author altro
+ *
+ */
 public class KeyIndexedCounting {
 	
 	public static void main(String[] args) {
@@ -46,18 +52,18 @@ public class KeyIndexedCounting {
 		Object[] aux = new Object[n];
 		int[] count = new int[radix + 1];
 		
-		for (int i = 0; i < n; i++) //计算出现的每一种index出现的频率
+		for (int i = 0; i < n; i++) //计算出现的每一种index出现的频率  (n)
 			count[a[i].getIndex() + 1]++;
 		
-		for (int i = 0; i < radix; i++) {
-			count[i + 1] = count[i] + count[i + 1]; //累加起来
+		for (int i = 0; i < radix; i++) {  
+			count[i + 1] = count[i] + count[i + 1]; //累加起来  (r)
 		}
 		
 		for (int i = 0; i < n; i++) { //根据累加的数组，来排序复制数组
-			aux[count[a[i].getIndex()]++] = a[i];
+			aux[count[a[i].getIndex()]++] = a[i];  //(n)
 		}
 		
-		for (int i = 0; i < n; i++)
+		for (int i = 0; i < n; i++) //(n)
 			a[i] = (T) aux[i];
 	}
 	

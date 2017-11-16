@@ -3,12 +3,11 @@ import static com.algorithms.sort.Sorts.exch;
 
 /**
  * 和一般的quickSort相比
- * 这个quickSort只需要go through 2NlogN个  character 而不需要每次都比较String的多少
+ * 这个quickSort只需要go through 1.39NlogN个  character 而不需要每次都比较String的多少
  * @author altro
  *
  */
 public class QuickSort3Way {
-	
 	
 	public static void sort(String[] a) {
 		sort(a, 0, a.length - 1, 0);

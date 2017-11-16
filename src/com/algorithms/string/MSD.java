@@ -5,9 +5,12 @@ import static com.algorithms.sort.Sorts.exch;
 
 import java.util.Arrays;
 /**
+ * string sort algorithms
  * most-significant-digit-first string sort
  * @author altro
  * most-significant means 字符串的第一位
+ * 最坏的情况是 N*W ,重复很多的时候
+ * 随机输入的时候 时间复杂度为 N*Log(r)(N)
  */
 public class MSD {
 	
@@ -30,11 +33,11 @@ public class MSD {
 	}
 	
 	private static int radix = 256;
-	private static final int threshold = 2;
+	private static final int threshold = 15;
 	
 	private static int charAt(String s, int d) {
 		if (d < s.length()) return s.charAt(d);
-		else return -1;
+		else return -1; 	//到达字符串的底部的时候返回-1
 	}
 	
 	//没有 并发，所以这边的aux是可以复用的

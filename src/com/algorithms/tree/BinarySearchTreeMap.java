@@ -18,6 +18,7 @@ import com.algorithms.elementary.Queue;
 public class BinarySearchTreeMap<K extends Comparable<K>, V> implements Map<K, V> {
 	
 	public static void main(String[] args) {
+		
 		Map<Integer, Integer> map = new BinarySearchTreeMap<>();
 		map.put(10, 10);
 		map.put(9, 9);
