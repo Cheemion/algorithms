@@ -1,6 +1,9 @@
 package com.algorithms.string;
 
 import java.util.Arrays;
+
+import javafx.util.Pair;
+
 import static com.algorithms.sort.Sorts.*;
 
 /**
@@ -14,16 +17,17 @@ public class ManberMyers {
 	private static final int radix = 256;
 
 	public static void main(String[] args) {
-		String[] suffixes = suffixes("999zsdfasdf9");
-		System.out.println("Original: " + Arrays.toString(suffixes));
-		sort(suffixes);
-		System.out.println(Arrays.toString(suffixes));
+		System.out.println(lrs("banana"));
 	}
 	
 	public static String lrs(String s) {
+		String[] suffixes = suffixes(s); //至少有一个字符
+		sort(suffixes);
 		String lrs = "";
-		String[] originalSuffixes = StringUtil.suffixes(s); //至少有一个字符
-		sort(originalSuffixes);
+		for (int i = 0; i < suffixes.length - 1; i++) {
+			int len = StringUtil.lcp(suffixes[i], suffixes[i + 1]);
+			if (len > lrs.length()) lrs = suffixes[i].substring(0, len);
+		}
 		return lrs;
 	}
 	
@@ -70,6 +74,7 @@ public class ManberMyers {
 	//sortedIndex meaning originalIndex -> sortedIndex
 	//根据第一个 char 排序了
 	public static void sort(String[] ss, int[] sortedToOriginal, int[] originalToSorted) {
+		
 		String[] firstSorted = new String[ss.length];
 		//先把第一个字母排序了
 		int[] count = new int[radix + 2];
@@ -95,11 +100,9 @@ public class ManberMyers {
 		}
 		
 		//根据第一次排序的顺序，决定接下来怎么排序。头一个字母相同的排在一起
-		for (int i = 0; i < count1.length - 1; i++) {
+		for (int i = 0; i < count1.length - 1; i++)
 			if (count1[i + 1] - count1[i] > 1)
 				quickSort3WayViaManberMyersMethod(ss , count1[i], count[i + 1] - 1, sortedToOriginal, originalToSorted, 1);
-		}
-		
 	}
 	
 	

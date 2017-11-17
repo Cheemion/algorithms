@@ -7,15 +7,13 @@ public class StringUtil {
 	
 	public static void main(String[] args) {
 		
-		System.out.println(lrs("asa1sasa1zxcvasdfwefasfv234234rasdfq234rfasdgqwerf23rfasz34rq=asdgfasgdfhasdkjfhkajsdhjkfhasdfhjkasdhfjkashdjkfasdfasdfasdfasdfasdfasdf"));
-		System.out.println(Arrays.toString(suffixes("123")));
-		
-		System.out.println("".length());
+		System.out.println(lrs("banana"));
+		System.out.println(Arrays.toString(suffixes("banana")));
 		
 	}
 	
 	
-	public static String[] suffixes(String s) { 
+	public static String[] suffixes(String s) {
 		int n = s.length();
 		String[] suffixes = new String[n];
 		for (int i = 0; i < n; i++) 
@@ -23,7 +21,7 @@ public class StringUtil {
 		return suffixes;
 	}
 	
-	//longestCommonPrefix
+	//longest Common Prefix
 	public static int lcp(String s, String t) {
 		int n = Math.min(s.length(), t.length());
 		for (int i = 0; i < n; i++)
