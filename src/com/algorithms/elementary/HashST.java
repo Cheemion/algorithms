@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 /**
- * separateChainingHashST 
+ * separate Chaining Hash ST 
  * @author Administrator
  *
  * @param <K>
