@@ -21,9 +21,13 @@ public class TernarySearchTries<V> implements StringST<V>{
 		System.out.println(tst.get("haha"));
 		System.out.println(tst.get("a"));
 		System.out.println(tst.get("b"));
+		
+		tst.delete("haha");
+		System.out.println("delete haha");
+		System.out.println(tst.get("haha"));
+
+		
 	}
-	
-	
 	
 	private Node<V> root;
 	
@@ -44,10 +48,26 @@ public class TernarySearchTries<V> implements StringST<V>{
 	
 	public void delete(String key) {
 		if (key == null) return;
-		delete(key, 0);
+		delete(root, key, 0, false);
 	}
 	
-	private void delete(String key, int d) {
+	private void delete(Node<V> x, String key, int d, Boolean needsDelete) {
+		if (key == null) return;
+		char c = key.charAt(d);
+		if (c < x.c) delete(x.left, key, d, needsDelete);
+		else if (c > x.c) delete(x.right, key, d, needsDelete);
+		else if (d < key.length() - 1) delete(x.mid, key, d, needsDelete);
+		else { //hit 找到目标了
+			x.val = null;
+			if (x.mid == null && x.right == null && x.left == null)
+				needsDelete = true;
+		}
+		
+		if (needsDelete && x.val == null) {
+			if (c < x.c) x.left = null;	
+			else if (c > x.c) x.right = null;
+			else x.mid = null;
+		} else needsDelete = false;
 		
 	}
 	
