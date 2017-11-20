@@ -1,5 +1,7 @@
 package com.algorithms.tree;
 
+import com.algorithms.elementary.Queue;
+
 /**
  * 非常快 hashing的效率差不多
  * 可以通过前面放一个R大小的数组 或者R^2大小的数组 来判断前面2个字符, 后面再跟着TST树
@@ -7,7 +9,22 @@ package com.algorithms.tree;
  *
  * @param <V>
  */
-public class TernarySearchTries<V> {
+public class TernarySearchTries<V> implements StringST<V>{
+	
+	
+	public static void main(String[] args) {
+		TernarySearchTries<Integer> tst = new TernarySearchTries();
+		tst.put("haha", 323);
+		tst.put("haha", 1);
+		tst.put("a", 2);
+		tst.put("b", 23);
+		
+		System.out.println(tst.get("haha"));
+		System.out.println(tst.get("a"));
+		System.out.println(tst.get("b"));
+	}
+	
+	
 	
 	private Node<V> root;
 	
@@ -27,8 +44,11 @@ public class TernarySearchTries<V> {
 	}
 	
 	public void delete(String key) {
-		if (!contains(key)) return;
-		root = put(root, key, null, 0);
+		delete(key, 0);
+	}
+	
+	private void delete(String key, int d) {
+		
 	}
 	
 	private Node<V> get(Node<V> x, String key, int d) {
@@ -54,6 +74,31 @@ public class TernarySearchTries<V> {
 		private V val;
 		private char c;
 		private Node<V> left, mid, right;
+	}
+
+	@Override
+	public Iterable<String> keys() {
+		return null;
+	}
+	
+	@Override
+	public Iterable<String> keysWithPrefix(String s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Iterable<String> keysThatMatch(String s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public String longestPrefixOf(String s) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
