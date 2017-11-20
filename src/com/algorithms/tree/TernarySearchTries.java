@@ -18,7 +18,6 @@ public class TernarySearchTries<V> implements StringST<V>{
 		tst.put("haha", 1);
 		tst.put("a", 2);
 		tst.put("b", 23);
-		
 		System.out.println(tst.get("haha"));
 		System.out.println(tst.get("a"));
 		System.out.println(tst.get("b"));
@@ -44,6 +43,7 @@ public class TernarySearchTries<V> implements StringST<V>{
 	}
 	
 	public void delete(String key) {
+		if (key == null) return;
 		delete(key, 0);
 	}
 	
