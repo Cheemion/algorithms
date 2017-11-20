@@ -1,4 +1,4 @@
-package com.algorithms.elementary;
+package com.algorithms.tree;
 /**
  * simple table implementation
  * @author altro
