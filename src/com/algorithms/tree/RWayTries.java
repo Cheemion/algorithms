@@ -88,7 +88,6 @@ public class RWayTries<V> implements StringST<V>{
 		return queue;
 	}
 	
-
 	private void collect(Node<V> x, String pre, String pat, Queue<String> q) {
 		int d = pre.length();
 		if (x == null) return;

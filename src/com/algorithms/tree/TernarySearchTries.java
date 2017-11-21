@@ -1,10 +1,12 @@
 package com.algorithms.tree;
 
+import com.algorithms.elementary.ArrayQueue;
 import com.algorithms.elementary.Queue;
 
 /**
  * 非常快 hashing的效率差不多
  * 可以通过前面放一个R大小的数组 或者R^2大小的数组 来判断前面2个字符, 后面再跟着TST树
+ * 可以理解成 左边和右边的节点其实 和当前节点是平行的
  * @author altro
  *
  * @param <V>
@@ -16,17 +18,12 @@ public class TernarySearchTries<V> implements StringST<V>{
 		TernarySearchTries<Integer> tst = new TernarySearchTries();
 		tst.put("haha", 323);
 		tst.put("haha", 1);
-		tst.put("a", 2);
-		tst.put("b", 23);
-		System.out.println(tst.get("haha"));
-		System.out.println(tst.get("a"));
-		System.out.println(tst.get("b"));
+		tst.put("hahahh", 1);
+		tst.put("as", 2);
+		tst.put("aba", 23);
 		
-		tst.delete("haha");
-		System.out.println("delete haha");
-		System.out.println(tst.get("haha"));
-
-		
+		System.out.println("*************************************");
+		System.out.println(tst.longestPrefixOf("hahahhhs"));
 	}
 	
 	private Node<V> root;
@@ -52,14 +49,15 @@ public class TernarySearchTries<V> implements StringST<V>{
 	}
 	
 	private void delete(Node<V> x, String key, int d, Boolean needsDelete) {
+		
 		if (key == null) return;
 		char c = key.charAt(d);
 		if (c < x.c) delete(x.left, key, d, needsDelete);
 		else if (c > x.c) delete(x.right, key, d, needsDelete);
-		else if (d < key.length() - 1) delete(x.mid, key, d, needsDelete);
+		else if (d < key.length() - 1) delete(x.mid, key, d + 1, needsDelete);
 		else { //hit 找到目标了
 			x.val = null;
-			if (x.mid == null && x.right == null && x.left == null)
+			if (x.mid == null && x.right == null && x.left == null) //没有子tree
 				needsDelete = true;
 		}
 		
@@ -89,36 +87,82 @@ public class TernarySearchTries<V> implements StringST<V>{
 		else x.val = val;
 		return x;
 	}
-
+	
 	private static class Node<V> {
 		private V val;
 		private char c;
 		private Node<V> left, mid, right;
+		@Override
+		public String toString() {
+			return "\n Node [val=" + val + ", c=" + c + ", left=" + left + ", mid=" + mid + ", right=" + right + "]";
+		}
+		
 	}
 
 	@Override
 	public Iterable<String> keys() {
-		return null;
+		Queue<String> queue = new ArrayQueue<>();
+		search(root, "", queue);
+		return queue;
+	}
+	
+	public void search(Node<V> x, String prefix, Queue<String> queue) {
+		if (x == null) return;
+		if (x.val != null) queue.enqueue(prefix + x.c);
+		
+		search(x.left, prefix, queue);
+		search(x.mid, prefix + x.c, queue);
+		search(x.right, prefix, queue);
+	}
+
+	
+	@Override
+	public Iterable<String> keysWithPrefix(String prefix) {
+		Queue<String> queue = new ArrayQueue<>();
+		Node<V> node = get(root, prefix, 0);
+		if (node.val != null) queue.enqueue(prefix);
+		search(node.mid, prefix, queue);
+		return queue;
+	}
+	
+	private void collect(Node<V> x, String pre, String pat, Queue<String> q) {
+		if (x == null) return;
+		char ch = pat.charAt(pre.length());
+		if (ch == x.c || ch == '.') {
+			String newPre = pre + x.c;
+			if (newPre.length() == pat.length() && x.val != null) q.enqueue(newPre);
+			if (newPre.length() == pat.length()) return;
+			collect(x.mid, newPre, pat, q);
+		}
+		
+		collect(x.left, pre, pat, q);
+		collect(x.right, pre, pat, q);
+	}
+	
+	
+	
+	//通配符 匹配
+	//所有和pat匹配的键, .代表匹配全部
+	@Override
+	public Iterable<String> keysThatMatch(String pattern) {
+		Queue<String> q = new ArrayQueue<>();
+		collect(root, "", pattern, q);
+		return q;
 	}
 	
 	@Override
-	public Iterable<String> keysWithPrefix(String s) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Iterable<String> keysThatMatch(String s) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public String longestPrefixOf(String s) {
-		// TODO Auto-generated method stub
-		return null;
+	public String longestPrefixOf(String query) {
+		int length = search(root, query, 0, 0);
+		return query.substring(0, length);
 	}
 	
+	
+	private int search(Node<V> x, String query, int d, int length) {
+		if (x == null) return length;
+		if (d == query.length()) return length;
+		char c = query.charAt(d);
+		if (c < x.c) return search(x.left, query, d, length);
+		else if (c > x.c) return search(x.right, query, d, length);
+		else return search(x.mid, query, d + 1, d + 1);
+	}
 }
