@@ -1,7 +1,7 @@
 package com.algorithms.string;
 
 import java.util.Arrays;
-
+// time propertional to N
 public class KMPSubstringSearch{
 	
 	private static final int R = 256; //д╛хо2^8
