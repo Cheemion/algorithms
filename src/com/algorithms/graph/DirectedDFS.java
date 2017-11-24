@@ -16,7 +16,14 @@ public class DirectedDFS implements Paths{
 	
 	public DirectedDFS(Digraph g, int s) {
 		marked = new boolean[g.vertices()];
+		edgeTo = new int[g.vertices()];
 		dfs(g, s);
+	}
+	public DirectedDFS(Digraph g, Iterable<Integer> ss) {
+		marked = new boolean[g.vertices()];
+		edgeTo = new int[g.vertices()];
+		for (int s : ss)
+			dfs(g, s);
 	}
 
 	private void dfs(Digraph g, int s) {
@@ -28,7 +35,7 @@ public class DirectedDFS implements Paths{
 			}
 		}
 	}
-
+	
 	@Override
 	public boolean hasPathTo(int v) {
 		return marked[v];

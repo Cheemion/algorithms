@@ -16,7 +16,7 @@ public class ArrayBag<T> implements Bag<T>{
 	}
 	
 	
-	private static int DEFAULT_CAPACITY = 10;
+	private static int DEFAULT_CAPACITY = 16;
 	private int capacity;
 	private T[] base;
 	private int index;//元素的数量
