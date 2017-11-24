@@ -9,6 +9,15 @@ import com.algorithms.graph.DirectedDFS;
 
 /*
  * Nondeterministic finite automaton
+ * stills needs to be completed
+ * add wilcard [1] [2]
+ * add multiway or ( | | |)
+ * handle metacharacters + ?
+ * support character classes [z-a]
+ * add capturing capabilities
+ * extend the closure operator
+ * error checking and recovery
+ * greedy vs. reluctant matching
  */
 public class NFA {
 	
