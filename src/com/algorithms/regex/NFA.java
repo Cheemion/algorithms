@@ -30,7 +30,7 @@ public class NFA {
 	}
 	
 	//Metacharacters
-	//now it only includes ( ) . * |
+	//now it only includes ( ) . * | 
 	private Digraph buildEpsilonTransitionDigraph() {
 		Digraph g = new Digraph(m + 1);
 		Stack<Integer> ops = new ArrayStack<>(); //operations
